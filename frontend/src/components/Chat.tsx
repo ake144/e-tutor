@@ -1,15 +1,29 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
+import { getSocket } from "@/lib/socket";
 
 export default function Chat() {
   const [messages, setMessages] = useState<{ text: string; self: boolean }[]>([]);
   const [input, setInput] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
+  const socketRef = useRef<any>(null);
+
+  useEffect(() => {
+    const socket = getSocket();
+    socketRef.current = socket;
+    socket.on("chat:message", (msg: string) => {
+      setMessages((msgs) => [...msgs, { text: msg, self: false }]);
+    });
+    return () => {
+      socket.off("chat:message");
+    };
+  }, []);
 
   function sendMessage(e?: React.FormEvent) {
     if (e) e.preventDefault();
     if (!input.trim()) return;
     setMessages((msgs) => [...msgs, { text: input, self: true }]);
+    socketRef.current?.emit("chat:send", input);
     setInput("");
   }
 
@@ -37,7 +51,7 @@ export default function Chat() {
       <form className="flex gap-2" onSubmit={sendMessage}>
         <input
           className="flex-1 border rounded-lg px-2 py-1 text-gray-700 bg-blue-50 focus:outline-none focus:border-blue-400"
-          placeholder="Type a message... (real-time coming soon)"
+          placeholder="Type a message... (real-time enabled)"
           value={input}
           onChange={e => setInput(e.target.value)}
         />
