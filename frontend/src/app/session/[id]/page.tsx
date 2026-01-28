@@ -1,0 +1,48 @@
+
+
+import VideoRoom from "@/components/VideoRoom";
+import CollaborativeNotebook from "@/components/CollaborativeNotebook";
+import Whiteboard from "@/components/Whiteboard";
+import Chat from "@/components/Chat";
+// Update the import path below to match your actual file structure or alias configuration.
+// For example, if the file is at src/auth/ProtectedRoute.tsx, use:
+// Update the import path below to match your actual file structure or alias configuration.
+// For example, if the file is at src/auth/ProtectedRoute.tsx, use:
+
+import { useAuthStore } from "@/hooks/useAuthStore";
+import ProtectedRoute from "@/app/(auth)/ProtectedRoute";
+
+export default function SessionRoomPage() {
+  const { user, logout } = useAuthStore();
+  return (
+    <ProtectedRoute>
+      <main className="flex flex-col min-h-screen">
+        <header className="p-4 bg-blue-700 text-white text-xl font-bold flex items-center justify-between">
+          <span>Session Room</span>
+          <div className="flex items-center gap-4">
+            <span className="text-base font-semibold">{user?.email}</span>
+            <button
+              className="px-3 py-1 rounded-lg bg-gradient-to-r from-blue-500 to-green-400 text-white font-bold shadow hover:from-blue-600 hover:to-green-500 transition"
+              onClick={logout}
+            >
+              Logout
+            </button>
+          </div>
+        </header>
+        <section className="flex-1 flex flex-col md:flex-row gap-4 p-4">
+          <div className="flex-1 flex flex-col gap-4">
+            <VideoRoom />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <CollaborativeNotebook />
+              <Whiteboard />
+            </div>
+          </div>
+          <aside className="w-full md:w-80 bg-white p-0 border-l flex flex-col gap-4">
+            <Chat />
+            {/* TODO: Add participants list here */}
+          </aside>
+        </section>
+      </main>
+    </ProtectedRoute>
+  );
+}
