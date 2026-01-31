@@ -5,7 +5,7 @@ import { createSession } from "@/lib/sessions";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import ProtectedRoute from "../(auth)/ProtectedRoute";
-import { tutors, allSubjects, Tutor } from "@/lib/tutors";
+import { Tutor, allSubjects, getTutors,  } from "@/lib/tutors";
 
 import BookingModal from "@/components/BookingModal";
 
@@ -17,9 +17,12 @@ export default function TutorsPage() {
   const [joinSessionId, setJoinSessionId] = useState<string | null>(null);
   const router = useRouter();
 
+
+
+
   const filteredTutors = subject
-    ? tutors.filter((t) => t.subjects.includes(subject))
-    : tutors;
+    ? getTutors().filter((t) => t.subjects.includes(subject))
+    : getTutors();
 
   function handleBook(date: string, time: string) {
     if (!user?.email || !bookingTutor) return;

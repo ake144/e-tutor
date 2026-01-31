@@ -1,3 +1,5 @@
+'use client';
+
 import {
   LiveKitRoom,
   VideoConference,
@@ -38,7 +40,7 @@ export default function VideoRoom({ sessionId, user }: VideoRoomProps) {
 
   if (error) {
     return (
-      <div className="w-full h-80 bg-black rounded-lg flex items-center justify-center text-red-400 text-lg">
+      <div className="w-full h-[480px] bg-black rounded-lg flex items-center justify-center text-red-400 text-lg">
         {error}
       </div>
     );
@@ -46,14 +48,14 @@ export default function VideoRoom({ sessionId, user }: VideoRoomProps) {
 
   if (!connectionDetails) {
     return (
-      <div className="w-full h-80 bg-black rounded-lg flex items-center justify-center text-white text-lg">
+      <div className="w-full h-[480px] bg-black rounded-lg flex items-center justify-center text-white text-lg">
         Connecting to LiveKit...
       </div>
     );
   }
 
   return (
-    <div className="w-full h-80 bg-black rounded-lg overflow-hidden flex flex-col">
+    <div className="w-full h-[480px] bg-black rounded-lg overflow-hidden flex flex-col">
       <LiveKitRoom
         video={true}
         audio={true}

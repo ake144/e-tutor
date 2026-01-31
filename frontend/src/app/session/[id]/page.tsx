@@ -1,4 +1,4 @@
-
+'use client';
 
 import VideoRoom from "@/components/VideoRoom";
 import CollaborativeNotebook from "@/components/CollaborativeNotebook";
@@ -12,17 +12,26 @@ import { useParams } from "next/navigation";
 
 import { useAuthStore } from "@/hooks/useAuthStore";
 import ProtectedRoute from "@/app/(auth)/ProtectedRoute";
+import { getSessionById } from "@/lib/sessions";
 
-export default function SessionRoomPage() {
+export default function SessionPage() {
   const { user, logout } = useAuthStore();
   const params = useParams();
   const sessionId = params?.id as string;
+  const session = typeof window !== "undefined" ? getSessionById(sessionId) : null;
 
   return (
     <ProtectedRoute>
       <main className="flex flex-col min-h-screen bg-gradient-to-br from-blue-50 to-green-50">
-        <header className="p-4 bg-blue-700 text-white text-xl font-bold flex items-center justify-between shadow">
-          <span>Session Room</span>
+        <header className="p-4 bg-blue-700 text-white text-xl font-bold flex flex-col md:flex-row md:items-center md:justify-between shadow gap-2 md:gap-0">
+          <div className="flex flex-col md:flex-row md:items-center gap-2">
+            <span>Session Room</span>
+            {session && (
+              <span className="text-base font-normal ml-0 md:ml-4 text-blue-100">
+                {session.date} at {session.time} &bull; Tutor: {session.tutor} &bull; Student: {session.student}
+              </span>
+            )}
+          </div>
           <div className="flex items-center gap-4">
             <span className="text-base font-semibold">{user?.email}</span>
             <button
@@ -35,7 +44,7 @@ export default function SessionRoomPage() {
         </header>
         <section className="flex-1 flex flex-col md:flex-row gap-4 p-4">
           <div className="flex-1 flex flex-col gap-4">
-            <div className="w-full h-96">
+            <div className="w-full" style={{ height: "480px" }}>
               <VideoRoom sessionId={sessionId} user={user} />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { addTutor, addParent } from "@/lib/tutors";
 
 
 interface SignupFields {
@@ -10,7 +11,7 @@ interface SignupFields {
   avatar?: string;
 }
 
-interface User {
+export interface User {
   email: string;
   role: "parent" | "tutor";
   name: string;
@@ -42,6 +43,7 @@ export const useAuthStore = create<AuthState>((set) => {
     error: null,
     login: async (email, password) => {
       set({ loading: true, error: null });
+
       // Mock API call
       await new Promise((r) => setTimeout(r, 800));
       if (email === "demo@tutorly.com" && password === "password") {
@@ -62,6 +64,21 @@ export const useAuthStore = create<AuthState>((set) => {
       // Mock API call
       await new Promise((r) => setTimeout(r, 800));
       const user = { email, ...fields };
+      if (fields.role === "tutor") {
+        // Add to tutors list
+        addTutor({
+          id: Math.random().toString(36).slice(2, 10),
+          email,
+          name: fields.name,
+          subjects: fields.subjects || [],
+          bio: fields.bio || "",
+          avatar: fields.avatar || "",
+          rating: 5.0,
+        });
+      }
+      if (fields.role === "parent") {
+        addParent(user);
+      }
       set({ user, loading: false });
       if (typeof window !== "undefined") localStorage.setItem("tutorly_user", JSON.stringify(user));
     },

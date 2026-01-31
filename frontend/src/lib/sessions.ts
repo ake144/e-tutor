@@ -9,19 +9,33 @@ export interface Session {
   time: string;
 }
 
-let sessions: Session[] = [];
+function loadSessions(): Session[] {
+  if (typeof window !== "undefined") {
+    const stored = localStorage.getItem("tutorly_sessions");
+    if (stored) return JSON.parse(stored);
+  }
+  return [];
+}
+
+function saveSessions(sessions: Session[]) {
+  if (typeof window !== "undefined") {
+    localStorage.setItem("tutorly_sessions", JSON.stringify(sessions));
+  }
+}
 
 export function createSession({ tutor, student, date, time }: { tutor: string; student: string; date: string; time: string }): Session {
   const id = Math.random().toString(36).slice(2, 10);
   const session = { id, tutor, student, date, time };
+  const sessions = loadSessions();
   sessions.push(session);
+  saveSessions(sessions);
   return session;
 }
 
 export function getSessionsForUser(email: string): Session[] {
-  return sessions.filter(s => s.tutor === email || s.student === email);
+  return loadSessions().filter(s => s.tutor === email || s.student === email);
 }
 
 export function getSessionById(id: string): Session | undefined {
-  return sessions.find(s => s.id === id);
+  return loadSessions().find(s => s.id === id);
 }
