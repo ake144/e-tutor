@@ -9,9 +9,16 @@ const io = new Server(server, {
   },
 });
 
+
 io.on("connection", (socket) => {
   socket.on("chat:send", (msg) => {
     io.emit("chat:message", msg);
+  });
+  socket.on("notebook:update", (val) => {
+    socket.broadcast.emit("notebook:update", val);
+  });
+  socket.on("whiteboard:draw", (data) => {
+    socket.broadcast.emit("whiteboard:draw", data);
   });
 });
 

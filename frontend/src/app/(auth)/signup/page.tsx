@@ -1,14 +1,24 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { allSubjects } from "@/lib/tutors";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import { useRouter } from "next/navigation";
 import { FaUser, FaLock, FaEnvelope } from "react-icons/fa";
 
+
 export default function SignupPage() {
+
+  const [role, setRole] = useState<"parent" | "tutor">("parent");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  // Tutor-specific fields
+  const [subjects, setSubjects] = useState<string[]>([]);
+  const [bio, setBio] = useState("");
+  const [avatar, setAvatar] = useState("");
   const [formError, setFormError] = useState<string | null>(null);
   const { signup, loading, error, user } = useAuthStore();
   const router = useRouter();
@@ -19,10 +29,14 @@ export default function SignupPage() {
     }
   }, [user, router]);
 
+  function handleSubjectChange(subj: string) {
+    setSubjects((prev) => prev.includes(subj) ? prev.filter(s => s !== subj) : [...prev, subj]);
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setFormError(null);
-    if (!email || !password || !confirm) {
+    if (!email || !password || !confirm || !name || !phone) {
       setFormError("All fields are required.");
       return;
     }
@@ -34,7 +48,19 @@ export default function SignupPage() {
       setFormError("Passwords do not match.");
       return;
     }
-    await signup(email, password);
+    if (role === "tutor") {
+      if (subjects.length === 0 || !bio || !avatar) {
+        setFormError("All tutor fields are required.");
+        return;
+      }
+    }
+    // Pass all info to signup (extend your store to handle extra fields/roles as needed)
+    await signup(email, password, {
+      role,
+      name,
+      phone,
+      ...(role === "tutor" ? { subjects, bio, avatar } : {}),
+    });
     // Redirect will happen in useEffect
   }
 
@@ -49,6 +75,34 @@ export default function SignupPage() {
           <p className="text-gray-500 text-sm">Create your account to start learning and having fun.</p>
         </div>
         <form className="space-y-5" onSubmit={handleSubmit}>
+          <div className="flex justify-center gap-4 mb-2">
+            <button
+              type="button"
+              className={`px-4 py-2 rounded-lg font-bold shadow transition border-2 ${role === "parent" ? "bg-blue-500 text-white border-blue-500" : "bg-white text-blue-700 border-blue-300"}`}
+              onClick={() => setRole("parent")}
+            >
+              Parent/Student
+            </button>
+            <button
+              type="button"
+              className={`px-4 py-2 rounded-lg font-bold shadow transition border-2 ${role === "tutor" ? "bg-green-500 text-white border-green-500" : "bg-white text-green-700 border-green-300"}`}
+              onClick={() => setRole("tutor")}
+            >
+              Tutor
+            </button>
+          </div>
+          <div className="relative">
+            <FaUser className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-300" />
+            <input
+              className="w-full pl-10 pr-4 py-2 border-2 border-blue-100 rounded-lg focus:outline-none focus:border-blue-400 transition text-gray-700 bg-blue-50 placeholder:text-blue-300"
+              placeholder="Full Name"
+              type="text"
+              aria-label="Full Name"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              required
+            />
+          </div>
           <div className="relative">
             <FaEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-300" />
             <input
@@ -62,6 +116,30 @@ export default function SignupPage() {
               required
             />
           </div>
+          <div className="relative">
+            <input
+              className="w-full pl-10 pr-4 py-2 border-2 border-blue-100 rounded-lg focus:outline-none focus:border-blue-400 transition text-gray-700 bg-blue-50 placeholder:text-blue-300"
+              placeholder="Phone Number"
+              type="tel"
+              aria-label="Phone Number"
+              value={phone}
+              onChange={e => setPhone(e.target.value)}
+              required
+            />
+          </div>
+          {/* <div className="relative">
+            <FaEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-300" />
+            <input
+              className="w-full pl-10 pr-4 py-2 border-2 border-blue-100 rounded-lg focus:outline-none focus:border-blue-400 transition text-gray-700 bg-blue-50 placeholder:text-blue-300"
+              placeholder="Email"
+              type="email"
+              aria-label="Email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              autoComplete="email"
+              required
+            />
+          </div> */}
           <div className="relative">
             <FaLock className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-300" />
             <input
@@ -88,6 +166,46 @@ export default function SignupPage() {
               required
             />
           </div>
+          {role === "tutor" && (
+            <>
+              <div>
+                <label className="block text-sm font-medium mb-1 text-blue-700">Subjects</label>
+                <div className="flex flex-wrap gap-2">
+                  {allSubjects.map((subj) => (
+                    <button
+                      type="button"
+                      key={subj}
+                      className={`px-3 py-1 rounded-full border text-sm font-medium transition ${subjects.includes(subj) ? "bg-blue-500 text-white" : "bg-white text-blue-700 border-blue-300 hover:bg-blue-50"}`}
+                      onClick={() => handleSubjectChange(subj)}
+                    >
+                      {subj}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1 text-blue-700">Bio</label>
+                <textarea
+                  className="w-full border rounded-lg p-2 text-gray-700 bg-blue-50 focus:outline-none focus:border-blue-400 resize-none"
+                  placeholder="Tell parents and students about yourself..."
+                  value={bio}
+                  onChange={e => setBio(e.target.value)}
+                  rows={3}
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1 text-blue-700">Avatar URL</label>
+                <input
+                  className="w-full border rounded-lg p-2 text-gray-700 bg-blue-50 focus:outline-none focus:border-blue-400"
+                  placeholder="Paste a profile image URL..."
+                  value={avatar}
+                  onChange={e => setAvatar(e.target.value)}
+                  required
+                />
+              </div>
+            </>
+          )}
           {(formError || error) && (
             <div className="text-red-500 text-sm text-center">{formError || error}</div>
           )}

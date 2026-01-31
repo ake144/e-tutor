@@ -2,7 +2,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import { getSocket } from "@/lib/socket";
 
-export default function Chat() {
+type ChatProps = {
+  sessionId: string;
+  user: { email: string } | null;
+};
+
+export default function Chat({ sessionId, user }: ChatProps) {
   const [messages, setMessages] = useState<{ text: string; self: boolean }[]>([]);
   const [input, setInput] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -57,7 +62,7 @@ export default function Chat() {
         />
         <button
           type="submit"
-          className="px-4 py-1.5 rounded-lg bg-gradient-to-r from-blue-500 to-green-400 text-white font-bold shadow hover:from-blue-600 hover:to-green-500 transition"
+          className="px-4 py-1.5 rounded-lg bg-linear-to-r from-blue-500 to-green-400 text-white font-bold shadow hover:from-blue-600 hover:to-green-500 transition"
         >
           Send
         </button>

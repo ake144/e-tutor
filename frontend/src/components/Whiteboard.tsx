@@ -1,6 +1,11 @@
 import React, { useRef, useEffect } from "react";
 
-export default function Whiteboard() {
+type WhiteboardProps = {
+  sessionId: string;
+  user: { email: string } | null;
+};
+
+export default function Whiteboard({ sessionId, user }: WhiteboardProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {

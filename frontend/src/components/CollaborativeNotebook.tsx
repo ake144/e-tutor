@@ -2,7 +2,12 @@
 import { useState, useRef, useEffect } from "react";
 import { getSocket } from "@/lib/socket";
 
-export default function CollaborativeNotebook() {
+type CollaborativeNotebookProps = {
+  sessionId: string;
+  user: { email: string } | null;
+};
+
+export default function CollaborativeNotebook({ sessionId, user }: CollaborativeNotebookProps) {
   const [value, setValue] = useState("");
   const socketRef = useRef<any>(null);
   const ignoreNext = useRef(false);

@@ -1,6 +1,8 @@
-
+"use client"
 
 import { useState } from "react";
+import { createSession } from "@/lib/sessions";
+import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import ProtectedRoute from "../(auth)/ProtectedRoute";
 import { tutors, allSubjects, Tutor } from "@/lib/tutors";
@@ -12,13 +14,23 @@ export default function TutorsPage() {
   const [subject, setSubject] = useState<string>("");
   const [bookingTutor, setBookingTutor] = useState<Tutor | null>(null);
   const [confirmation, setConfirmation] = useState<string | null>(null);
+  const [joinSessionId, setJoinSessionId] = useState<string | null>(null);
+  const router = useRouter();
 
   const filteredTutors = subject
     ? tutors.filter((t) => t.subjects.includes(subject))
     : tutors;
 
   function handleBook(date: string, time: string) {
-    setConfirmation(`Session booked with ${bookingTutor?.name} on ${date} at ${time}!`);
+    if (!user?.email || !bookingTutor) return;
+    const session = createSession({
+      tutor: bookingTutor.email,
+      student: user.email,
+      date,
+      time,
+    });
+    setJoinSessionId(session.id);
+    setConfirmation(`Session booked with ${bookingTutor.name} on ${date} at ${time}!`);
     setBookingTutor(null);
   }
 
@@ -96,9 +108,17 @@ export default function TutorsPage() {
           onBook={handleBook}
         />
         {confirmation && (
-          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-green-100 border border-green-300 text-green-800 px-6 py-3 rounded-xl shadow-lg z-50">
-            {confirmation}
-            <button className="ml-4 text-blue-600 underline" onClick={() => setConfirmation(null)}>Close</button>
+          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-green-100 border border-green-300 text-green-800 px-6 py-3 rounded-xl shadow-lg z-50 flex flex-col items-center gap-2">
+            <span>{confirmation}</span>
+            {joinSessionId && (
+              <button
+                className="mt-2 px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-green-400 text-white font-bold shadow hover:from-blue-600 hover:to-green-500 transition"
+                onClick={() => router.push(`/session/${joinSessionId}`)}
+              >
+                Join Session
+              </button>
+            )}
+            <button className="ml-4 text-blue-600 underline" onClick={() => { setConfirmation(null); setJoinSessionId(null); }}>Close</button>
           </div>
         )}
       </main>

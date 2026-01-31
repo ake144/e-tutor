@@ -1,39 +1,71 @@
-"use client";
-import React, { useRef, useEffect, useState } from "react";
+import {
+  LiveKitRoom,
+  VideoConference,
+  ControlBar,
+  useToken,
+} from "@livekit/components-react";
+import "@livekit/components-styles";
+import { useEffect, useState } from "react";
 
-export default function VideoRoom() {
-  const videoRef = useRef<HTMLVideoElement>(null);
+type VideoRoomProps = {
+  sessionId: string;
+  user: { email: string } | null;
+};
+
+export default function VideoRoom({ sessionId, user }: VideoRoomProps) {
+  const [connectionDetails, setConnectionDetails] = useState<null | {
+    serverUrl: string;
+    participantToken: string;
+    roomName: string;
+    participantName: string;
+  }>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-      .then((stream) => {
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-        }
-      })
-      .catch(() => setError("Unable to access webcam. Please allow camera access."));
-    return () => {
-      if (videoRef.current && videoRef.current.srcObject) {
-        (videoRef.current.srcObject as MediaStream).getTracks().forEach(track => track.stop());
+    async function fetchDetails() {
+      try {
+        const res = await fetch(
+          "/api/connection-details?roomName=demo-room&participantName=User" + Math.floor(Math.random() * 1000)
+        );
+        if (!res.ok) throw new Error(await res.text());
+        setConnectionDetails(await res.json());
+      } catch (err: any) {
+        setError(err.message || "Failed to connect to LiveKit");
       }
-    };
+    }
+    fetchDetails();
   }, []);
 
+  if (error) {
+    return (
+      <div className="w-full h-80 bg-black rounded-lg flex items-center justify-center text-red-400 text-lg">
+        {error}
+      </div>
+    );
+  }
+
+  if (!connectionDetails) {
+    return (
+      <div className="w-full h-80 bg-black rounded-lg flex items-center justify-center text-white text-lg">
+        Connecting to LiveKit...
+      </div>
+    );
+  }
+
   return (
-    <div className="w-full h-80 bg-black rounded-lg flex items-center justify-center text-white relative overflow-hidden">
-      {error ? (
-        <span className="text-lg text-red-400">{error}</span>
-      ) : (
-        <video
-          ref={videoRef}
-          autoPlay
-          playsInline
-          muted
-          className="w-full h-full object-cover rounded-lg"
-        />
-      )}
-      <span className="absolute bottom-2 left-2 bg-black/60 px-3 py-1 rounded text-xs">Your Camera Preview (LiveKit/Agora coming soon)</span>
+    <div className="w-full h-80 bg-black rounded-lg overflow-hidden flex flex-col">
+      <LiveKitRoom
+        video={true}
+        audio={true}
+        token={connectionDetails.participantToken}
+        serverUrl={connectionDetails.serverUrl}
+        connect={true}
+        data-lk-theme="default"
+        style={{ height: "100%" }}
+      >
+        <VideoConference />
+        <ControlBar />
+      </LiveKitRoom>
     </div>
   );
 }

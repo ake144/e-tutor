@@ -4,6 +4,7 @@ import VideoRoom from "@/components/VideoRoom";
 import CollaborativeNotebook from "@/components/CollaborativeNotebook";
 import Whiteboard from "@/components/Whiteboard";
 import Chat from "@/components/Chat";
+import { useParams } from "next/navigation";
 // Update the import path below to match your actual file structure or alias configuration.
 // For example, if the file is at src/auth/ProtectedRoute.tsx, use:
 // Update the import path below to match your actual file structure or alias configuration.
@@ -14,10 +15,13 @@ import ProtectedRoute from "@/app/(auth)/ProtectedRoute";
 
 export default function SessionRoomPage() {
   const { user, logout } = useAuthStore();
+  const params = useParams();
+  const sessionId = params?.id as string;
+
   return (
     <ProtectedRoute>
-      <main className="flex flex-col min-h-screen">
-        <header className="p-4 bg-blue-700 text-white text-xl font-bold flex items-center justify-between">
+      <main className="flex flex-col min-h-screen bg-gradient-to-br from-blue-50 to-green-50">
+        <header className="p-4 bg-blue-700 text-white text-xl font-bold flex items-center justify-between shadow">
           <span>Session Room</span>
           <div className="flex items-center gap-4">
             <span className="text-base font-semibold">{user?.email}</span>
@@ -31,14 +35,16 @@ export default function SessionRoomPage() {
         </header>
         <section className="flex-1 flex flex-col md:flex-row gap-4 p-4">
           <div className="flex-1 flex flex-col gap-4">
-            <VideoRoom />
+            <div className="w-full h-96">
+              <VideoRoom sessionId={sessionId} user={user} />
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <CollaborativeNotebook />
-              <Whiteboard />
+              <CollaborativeNotebook sessionId={sessionId} user={user} />
+              <Whiteboard sessionId={sessionId} user={user} />
             </div>
           </div>
-          <aside className="w-full md:w-80 bg-white p-0 border-l flex flex-col gap-4">
-            <Chat />
+          <aside className="w-full md:w-80 bg-white/80 p-0 border-l flex flex-col gap-4 rounded-lg shadow-lg">
+            <Chat sessionId={sessionId} user={user} />
             {/* TODO: Add participants list here */}
           </aside>
         </section>
