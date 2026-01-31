@@ -43,9 +43,14 @@ export const useAuthStore = create<AuthState>((set) => {
     error: null,
     login: async (email, password) => {
       set({ loading: true, error: null });
-
-      // Mock API call
       await new Promise((r) => setTimeout(r, 800));
+      // Load all users from localStorage
+      let users: any[] = [];
+      if (typeof window !== "undefined") {
+        const stored = localStorage.getItem("tutorly_all_users");
+        if (stored) users = JSON.parse(stored);
+      }
+      // Demo user fallback
       if (email === "demo@tutorly.com" && password === "password") {
         const demoUser: User = {
           email,
@@ -55,17 +60,30 @@ export const useAuthStore = create<AuthState>((set) => {
         };
         set({ user: demoUser, loading: false });
         if (typeof window !== "undefined") localStorage.setItem("tutorly_user", JSON.stringify(demoUser));
+        return;
+      }
+      // Find user
+      const found = users.find(u => u.email === email && u.password === password);
+      if (found) {
+        set({ user: found, loading: false });
+        if (typeof window !== "undefined") localStorage.setItem("tutorly_user", JSON.stringify(found));
       } else {
         set({ error: "Invalid credentials", loading: false });
       }
     },
     signup: async (email, password, fields) => {
       set({ loading: true, error: null });
-      // Mock API call
       await new Promise((r) => setTimeout(r, 800));
-      const user = { email, ...fields };
+      const user = { email, password, ...fields };
+      // Save to all users
+      let users: any[] = [];
+      if (typeof window !== "undefined") {
+        const stored = localStorage.getItem("tutorly_all_users");
+        if (stored) users = JSON.parse(stored);
+      }
+      users.push(user);
+      if (typeof window !== "undefined") localStorage.setItem("tutorly_all_users", JSON.stringify(users));
       if (fields.role === "tutor") {
-        // Add to tutors list
         addTutor({
           id: Math.random().toString(36).slice(2, 10),
           email,
@@ -75,9 +93,6 @@ export const useAuthStore = create<AuthState>((set) => {
           avatar: fields.avatar || "",
           rating: 5.0,
         });
-      }
-      if (fields.role === "parent") {
-        addParent(user);
       }
       set({ user, loading: false });
       if (typeof window !== "undefined") localStorage.setItem("tutorly_user", JSON.stringify(user));
