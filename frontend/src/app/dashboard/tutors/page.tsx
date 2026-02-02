@@ -4,7 +4,7 @@ import { useState } from "react";
 import { createSession } from "@/lib/sessions";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/hooks/useAuthStore";
-import ProtectedRoute from "../(auth)/ProtectedRoute";
+import ProtectedRoute from "../../(auth)/ProtectedRoute";
 import { Tutor, allSubjects, getTutors,  } from "@/lib/tutors";
 
 import BookingModal from "@/components/BookingModal";
@@ -39,8 +39,8 @@ export default function TutorsPage() {
 
   return (
     <ProtectedRoute>
-      <main className="p-8">
-        <div className="flex items-center justify-between mb-4">
+      <main className="p-12">
+        <div className="flex items-center  justify-between mb-4">
           <h1 className="text-4xl font-bold">Find a Tutor</h1>
           <div className="flex items-center gap-4">
             <span className="text-lg text-blue-700 font-semibold">{user?.email}</span>
@@ -52,7 +52,7 @@ export default function TutorsPage() {
             </button>
           </div>
         </div>
-        <div className="mb-6 flex flex-wrap gap-2 items-center">
+        <div className="mb-6 flex flex-wrap gap-2 mt-8 p-4 items-center">
           <span className="font-semibold text-blue-700">Filter by subject:</span>
           <button
             className={`px-3 py-1 rounded-full border text-sm font-medium transition ${subject === "" ? "bg-blue-500 text-white" : "bg-white text-blue-700 border-blue-300 hover:bg-blue-50"}`}

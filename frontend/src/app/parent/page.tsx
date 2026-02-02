@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useEffect } from "react";
 import { getSessionsForUser } from "@/lib/sessions";
 // In a real app, parent-child mapping would be dynamic. Here, we demo with a static child email.
