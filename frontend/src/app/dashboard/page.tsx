@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import { useRouter } from "next/navigation";
@@ -20,6 +21,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import Sidebar from "@/components/Sidebar";
+import { getSessionsForUser } from "@/lib/sessions";
 
 // Mock Data for Charts
 const data = [
@@ -32,12 +34,24 @@ const data = [
   { name: "Sun", score: 88 },
 ];
 
+const CHILD_EMAIL = "student@example.com";
+
 export default function Dashboard() {
   const { user, isAuthenticated } = useAuthStore();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [sessions, setSessions] = useState<any[]>([]);
+  
+    // useEffect(() => {
+    //   console.log("Fetching sessions for child:", CHILD_EMAIL);
+    //   setSessions(getSessionsForUser(CHILD_EMAIL));
+    //   console.log("Fetched sessions:", sessions);
+    // }, []);
+
+    console.log("Fetching sessions for child:", getSessionsForUser(user?.email || CHILD_EMAIL));
 
   useEffect(() => {
+    setSessions(getSessionsForUser(user?.email || CHILD_EMAIL));
     // Simulate loading/auth check
     if (!isAuthenticated) {
       router.push("/login");
@@ -45,6 +59,10 @@ export default function Dashboard() {
       setTimeout(() => setLoading(false), 500);
     }
   }, [isAuthenticated, router]);
+
+  const handleSesionJoin = (sessionId: string) => {
+    router.push(`/session/${sessionId}`);
+  };
 
   if (loading) {
     return (
@@ -210,19 +228,50 @@ export default function Dashboard() {
                     </div>
                  </div>
 
-                 <div className="pt-4 border-t border-gray-50">
-                    <h3 className="font-bold text-gray-800 text-sm mb-3">Next Session</h3>
-                    <div className="bg-blue-50 p-4 rounded-xl flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
-                            <FaBookOpen />
-                        </div>
-                        <div>
-                            <p className="font-bold text-gray-800 text-xs text-sm">Mathematics</p>
-                            <p className="text-xs text-blue-500">Today, 4:00 PM</p>
-                        </div>
-                        <button className="ml-auto bg-blue-600 text-white p-2 rounded-full shadow-lg shadow-blue-200">
-                            <FaArrowRight size={12} />
-                        </button>
+                 <div className="pt-6 border-t border-gray-100 mt-6">
+                    <div className="flex items-center justify-between mb-5">
+                       <h3 className="font-bold text-gray-800">Your Sessions</h3>
+                       <button className="text-xs font-semibold text-blue-600 hover:text-blue-700 bg-blue-50 px-3 py-1.5 rounded-lg transition-colors">See all</button>
+                    </div>
+                    
+                    <div className="flex flex-col gap-4">
+                        {sessions.length > 0 ? (
+                          sessions.map((session, index) => (
+                            <div key={index} className="group bg-white border border-gray-100 p-4 rounded-2xl flex items-center justify-between hover:shadow-lg hover:shadow-blue-500/5 hover:border-blue-100 transition-all duration-300">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 text-blue-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform shadow-inner">
+                                        <FaBookOpen size={16} />
+                                    </div>
+                                    <div>
+                                        <p className="font-bold text-gray-800 text-base">{session.tutor}</p>
+                                        <div className="flex items-center gap-2 text-xs text-gray-500 mt-1">
+                                            <div className="flex items-center gap-1 bg-gray-50 px-2 py-0.5 rounded-md">
+                                                <FaClock size={10} className="text-gray-400" />
+                                                <span className="font-medium text-gray-600">{session.time}</span>
+                                            </div>
+                                            <span className="text-gray-300">|</span>
+                                            <span className="text-gray-400 font-medium">{session.date}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button 
+                                    onClick={() => handleSesionJoin(session.id)} 
+                                    className="w-10 h-10 rounded-xl bg-white border border-gray-100 text-gray-400 flex items-center justify-center hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all shadow-sm group-hover:translate-x-1"
+                                    title="Join Session"
+                                >
+                                    <FaArrowRight size={14} />
+                                </button>
+                            </div>
+                          ))
+                        ) : (
+                             <div className="p-8 bg-gray-50 rounded-2xl text-center border overflow-hidden border-dashed border-gray-200">
+                                <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 mx-auto mb-3">
+                                    <FaBookOpen />
+                                </div>
+                                <p className="text-gray-500 text-sm font-medium">No sessions scheduled.</p>
+                                <button className="mt-4 text-blue-600 font-bold text-sm hover:underline">Find a Tutor</button>
+                             </div>
+                        )}
                     </div>
                  </div>
             </div>

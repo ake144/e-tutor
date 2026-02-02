@@ -243,25 +243,17 @@ function TutorCard({ tutor, onBook }: { tutor: Tutor; onBook: () => void }) {
 
 function BookingModal({ tutor, onClose, user }: { tutor: Tutor, onClose: () => void, user: any }) {
     const router = useRouter();
-    const [loading, setLoading] = useState(false);
+    const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+    const [time, setTime] = useState("10:00");
 
-    const handleConfirm = () => {
-        setLoading(true);
-        // Simulate API
-        setTimeout(() => {
-            if (user?.email) {
-                createSession({
-                    tutor: tutor.email,
-                    student: user.email,
-                    date: new Date().toISOString().split('T')[0],
-                    time: "10:00 AM" // Mock
-                });
-            }
-            setLoading(false);
-            onClose();
-            router.push('/dashboard');
-            alert(`Session booked with ${tutor.name}!`);
-        }, 1000);
+    const handleProceed = () => {
+        const params = new URLSearchParams({
+            tutorId: tutor.id,
+            date,
+            time
+        });
+        onClose();
+        router.push(`/checkout?${params.toString()}`);
     }
 
     return (
@@ -277,22 +269,36 @@ function BookingModal({ tutor, onClose, user }: { tutor: Tutor, onClose: () => v
                 </div>
                 
                 <div className="space-y-4 mb-6">
-                    <div className="bg-gray-50 p-4 rounded-xl flex justify-between items-center">
-                        <span className="text-sm font-medium text-gray-600">Hourly Rate</span>
-                        <span className="font-bold text-gray-900">${tutor.hourlyPrice}/hr</span>
+                    <div>
+                        <label className="block text-sm font-bold text-gray-700 mb-1">Select Date</label>
+                        <input 
+                            type="date" 
+                            className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={date}
+                            onChange={(e) => setDate(e.target.value)}
+                        />
                     </div>
-                     <div className="bg-gray-50 p-4 rounded-xl flex justify-between items-center">
-                        <span className="text-sm font-medium text-gray-600">Duration</span>
-                        <span className="font-bold text-gray-900">1 Hour</span>
+                    <div>
+                        <label className="block text-sm font-bold text-gray-700 mb-1">Select Time</label>
+                        <input 
+                            type="time" 
+                            className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={time}
+                            onChange={(e) => setTime(e.target.value)}
+                        />
+                    </div>
+                    
+                    <div className="bg-blue-50 p-4 rounded-xl flex justify-between items-center text-blue-800">
+                        <span className="text-sm font-medium">Hourly Rate</span>
+                        <span className="font-bold">${tutor.hourlyPrice}/hr</span>
                     </div>
                 </div>
 
                 <button 
-                  onClick={handleConfirm}
-                  disabled={loading}
-                  className="w-full bg-blue-600 text-white font-bold text-lg py-3 rounded-xl hover:bg-blue-700 transition shadow-lg shadow-blue-200 disabled:opacity-70 flex justify-center items-center"
+                  onClick={handleProceed}
+                  className="w-full bg-blue-600 text-white font-bold text-lg py-3 rounded-xl hover:bg-blue-700 transition shadow-lg shadow-blue-200 flex justify-center items-center gap-2"
                 >
-                    {loading ? <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div> : "Confirm Booking"}
+                    Proceed to Checkout <FaBolt size={14} />
                 </button>
             </div>
         </div>
