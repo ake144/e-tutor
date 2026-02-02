@@ -24,6 +24,7 @@ export interface User {
 interface AuthState {
   user: null | User;
   loading: boolean;
+  isAuthenticated: boolean;
   error: string | null;
   login: (email: string, password: string) => Promise<void>;
   signup: (email: string, password: string, fields: SignupFields) => Promise<void>;
@@ -39,6 +40,7 @@ export const useAuthStore = create<AuthState>((set) => {
   }
   return {
     user: initialUser,
+    isAuthenticated: initialUser !== null,
     loading: false,
     error: null,
     login: async (email, password) => {
@@ -58,14 +60,14 @@ export const useAuthStore = create<AuthState>((set) => {
           name: "Demo User",
           phone: "000-000-0000",
         };
-        set({ user: demoUser, loading: false });
+        set({ user: demoUser, loading: false, isAuthenticated: true });
         if (typeof window !== "undefined") localStorage.setItem("tutorly_user", JSON.stringify(demoUser));
         return;
       }
       // Find user
       const found = users.find(u => u.email === email && u.password === password);
       if (found) {
-        set({ user: found, loading: false });
+        set({ user: found, loading: false, isAuthenticated: true });
         if (typeof window !== "undefined") localStorage.setItem("tutorly_user", JSON.stringify(found));
       } else {
         set({ error: "Invalid credentials", loading: false });
@@ -92,13 +94,15 @@ export const useAuthStore = create<AuthState>((set) => {
           bio: fields.bio || "",
           avatar: fields.avatar || "",
           rating: 5.0,
+          hourlyPrice: 40,
+          reviews: 0,
         });
       }
-      set({ user, loading: false });
+      set({ user, loading: false, isAuthenticated: true });
       if (typeof window !== "undefined") localStorage.setItem("tutorly_user", JSON.stringify(user));
     },
     logout: () => {
-      set({ user: null });
+      set({ user: null, isAuthenticated: false });
       if (typeof window !== "undefined") localStorage.removeItem("tutorly_user");
     },
   };

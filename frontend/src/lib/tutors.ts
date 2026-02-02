@@ -9,6 +9,8 @@ export interface Tutor {
   bio: string;
   avatar: string;
   rating: number;
+  hourlyPrice: number;
+  reviews: number;
 }
 
 function getInitialTutors(): Tutor[] {
@@ -26,6 +28,8 @@ function getInitialTutors(): Tutor[] {
       bio: "Experienced math and science tutor with a passion for helping kids learn in fun ways.",
       avatar: "https://randomuser.me/api/portraits/women/44.jpg",
       rating: 4.9,
+      hourlyPrice: 35,
+      reviews: 120
     },
     {
       id: "2",
@@ -35,6 +39,8 @@ function getInitialTutors(): Tutor[] {
       bio: "Enthusiastic English and history tutor who loves storytelling and interactive lessons.",
       avatar: "https://randomuser.me/api/portraits/men/32.jpg",
       rating: 4.8,
+      hourlyPrice: 28,
+      reviews: 85
     },
     {
       id: "3",
@@ -44,6 +50,8 @@ function getInitialTutors(): Tutor[] {
       bio: "Creative art and math tutor, making learning visual and engaging for all ages.",
       avatar: "https://randomuser.me/api/portraits/women/68.jpg",
       rating: 4.7,
+      hourlyPrice: 40,
+      reviews: 95
     },
     {
       id: "4",
@@ -53,6 +61,8 @@ function getInitialTutors(): Tutor[] {
       bio: "STEM enthusiast and coding mentor, helping kids build confidence and curiosity.",
       avatar: "https://randomuser.me/api/portraits/men/76.jpg",
       rating: 4.95,
+      hourlyPrice: 50,
+      reviews: 210
     },
   ];
 }
