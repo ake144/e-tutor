@@ -30,20 +30,20 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100">
-      <div className="w-full max-w-md p-8 bg-white/90 rounded-3xl shadow-2xl border border-purple-100 relative">
+    <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-200 via-purple-100 to-pink-100">
+      <div className="w-full max-w-md md:max-w-lg p-8 bg-white/90 rounded-3xl shadow-2xl border border-blue-100 relative">
         <div className="flex flex-col items-center mb-6">
-          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-400 to-blue-400 flex items-center justify-center mb-2 shadow-lg">
+          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center mb-2 shadow-lg">
             <FaUser className="text-white text-3xl" />
           </div>
-          <h1 className="text-3xl font-extrabold text-purple-700 mb-1">Welcome Back!</h1>
+          <h1 className="text-3xl font-extrabold text-blue-700 mb-1">Welcome Back!</h1>
           <p className="text-gray-500 text-sm">Sign in to your Tutorly account</p>
         </div>
         <form className="space-y-5" onSubmit={handleSubmit}>
           <div className="relative">
-            <FaEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-purple-300" />
+            <FaEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-300" />
             <input
-              className="w-full pl-10 pr-4 py-2 border-2 border-purple-100 rounded-lg focus:outline-none focus:border-purple-400 transition text-gray-700 bg-purple-50 placeholder:text-purple-300"
+              className="w-full pl-10 pr-4 py-2 border-2 border-blue-100 rounded-lg focus:outline-none focus:border-blue-400 transition text-gray-700 bg-blue-50 placeholder:text-blue-300"
               placeholder="Email"
               type="email"
               aria-label="Email"
@@ -54,9 +54,9 @@ export default function LoginPage() {
             />
           </div>
           <div className="relative">
-            <FaLock className="absolute left-3 top-1/2 -translate-y-1/2 text-purple-300" />
+            <FaLock className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-300" />
             <input
-              className="w-full pl-10 pr-4 py-2 border-2 border-purple-100 rounded-lg focus:outline-none focus:border-purple-400 transition text-gray-700 bg-purple-50 placeholder:text-purple-300"
+              className="w-full pl-10 pr-4 py-2 border-2 border-blue-100 rounded-lg focus:outline-none focus:border-blue-400 transition text-gray-700 bg-blue-50 placeholder:text-blue-300"
               placeholder="Password"
               type="password"
               aria-label="Password"
@@ -70,14 +70,14 @@ export default function LoginPage() {
             <div className="text-red-500 text-sm text-center">{formError || error}</div>
           )}
           <button
-            className="w-full py-2 bg-gradient-to-r from-purple-500 to-blue-400 text-white rounded-lg font-bold text-lg shadow hover:from-purple-600 hover:to-blue-500 transition disabled:opacity-60"
+            className="w-full py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg font-bold text-lg shadow hover:from-blue-600 hover:to-purple-600 transition disabled:opacity-60"
             disabled={loading}
             type="submit"
           >
             {loading ? "Signing In..." : "Sign In"}
           </button>
         </form>
-        <p className="mt-6 text-center text-sm text-gray-500">Don’t have an account? <a href="/signup" className="text-purple-600 hover:underline font-semibold">Sign up</a></p>
+        <p className="mt-6 text-center text-sm text-gray-500">Don’t have an account? <a href="/signup" className="text-blue-600 hover:underline font-semibold">Sign up</a></p>
       </div>
     </main>
   );

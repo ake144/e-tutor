@@ -65,8 +65,8 @@ export default function SignupPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-green-200 via-blue-100 to-pink-100">
-      <div className="w-full max-w-md p-8 bg-white/90 rounded-3xl shadow-2xl border border-blue-100 relative">
+    <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-200 via-purple-100 pt-4 to-pink-100">
+      <div className="w-full max-w-md md:max-w-xl p-8 bg-white/90 rounded-3xl shadow-2xl border border-blue-100 relative">
         <div className="flex flex-col items-center mb-6">
           <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-400 to-green-400 flex items-center justify-center mb-2 shadow-lg">
             <FaUser className="text-white text-3xl" />
