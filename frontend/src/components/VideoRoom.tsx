@@ -55,7 +55,7 @@ export default function VideoRoom({ sessionId, user }: VideoRoomProps) {
   }
 
   return (
-    <div className="w-full h-[480px] bg-black rounded-lg overflow-hidden flex flex-col">
+    <div className="w-full h-full bg-gray-950 rounded-lg overflow-hidden relative group">
       <LiveKitRoom
         video={true}
         audio={true}
@@ -65,8 +65,26 @@ export default function VideoRoom({ sessionId, user }: VideoRoomProps) {
         data-lk-theme="default"
         style={{ height: "100%" }}
       >
-        <VideoConference />
-        <ControlBar />
+        <div className="absolute inset-0">
+             <VideoConference />
+        </div>
+        
+        {/* Custom styled control bar overlay */}
+        {/* <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center justify-center w-full pointer-events-none">
+             <div className="bg-gray-900/90 backdrop-blur-md p-2 rounded-2xl border border-gray-700 shadow-xl pointer-events-auto">
+                <ControlBar 
+                    variation="minimal" 
+                    controls={{ 
+                        microphone: true, 
+                        camera: true, 
+                        screenShare: true, 
+                       
+                        chat: false,
+                        leave: false,
+                    }} 
+                />
+             </div>
+        </div> */}
       </LiveKitRoom>
     </div>
   );

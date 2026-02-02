@@ -61,7 +61,7 @@ export default function Dashboard() {
   }, [isAuthenticated, router]);
 
   const handleSesionJoin = (sessionId: string) => {
-    router.push(`/session/${sessionId}`);
+    router.push(`/dashboard/session/${sessionId}`);
   };
 
   if (loading) {
