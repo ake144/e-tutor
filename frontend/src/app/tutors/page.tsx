@@ -25,9 +25,31 @@ export default function TutorsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [bookingTutor, setBookingTutor] = useState<Tutor | null>(null);
   
-  const tutors = getTutors();
+  const [tutors, setTutors] = useState<Tutor[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    // Build query
+    const params = new URLSearchParams();
+    if (selectedSubject !== "All") params.append("subject", selectedSubject);
+    
+    // Simple mapping for price to generic maxPrice for now, or just client side filter
+    // For now let's fetch all and filter client side to match the complex ranges (Under 30, 30-50, etc)
+    // In a real app, you'd want robust backend filtering.
+    
+    fetch(`/api/tutors?${params.toString()}`)
+      .then(res => res.json())
+      .then(data => {
+         if(data.success) {
+             setTutors(data.data);
+         }
+         setLoading(false);
+      });
+  }, [selectedSubject]);
 
   const filteredTutors = tutors.filter((tutor) => {
+    // Subject is already filtered by API if not "All", but good to double check or if we selected "All" after
     const matchesSubject = selectedSubject === "All" || tutor.subjects.includes(selectedSubject);
     const matchesSearch = tutor.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           tutor.bio.toLowerCase().includes(searchQuery.toLowerCase());

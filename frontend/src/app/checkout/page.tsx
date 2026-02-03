@@ -33,9 +33,16 @@ function CheckoutContent() {
 
   useEffect(() => {
     if (tutorId) {
-      const allTutors = getTutors();
-      const found = allTutors.find(t => t.id === tutorId);
-      if (found) setTutor(found);
+      // Fetch specific tutor details from API
+      // In a real app we would have a specific getTutorById endpoint, but filtering the list works for now
+      fetch(`/api/tutors`)
+         .then(res => res.json())
+         .then(data => {
+             if(data.success && data.data) {
+                 const found = data.data.find((t:any) => t.id === tutorId);
+                 if (found) setTutor(found);
+             }
+         });
     }
   }, [tutorId]);
 
@@ -54,31 +61,35 @@ function CheckoutContent() {
   // Format Date
   const displayDate = dateParam ? new Date(dateParam).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) : "Mon, Oct 24, 2023";
 
-  // Dummy Chapa Payment Handler
+  // Chapa Payment Handler
   const handlePayment = async () => {
     setLoading(true);
     setIsChapaProcessing(true);
     
-    // In a real Chapa implementation, you would:
-    // 1. Call your backend to Initialize transaction
-    // 2. Get a checkout_url from Chapa
-    // 3. Redirect user to that URL
-    // OR use Chapa inline script
-    
-    // Simulating the "Secure Checkout" experience from the image while "processing" via Chapa in spirit
-    setTimeout(() => {
-        const session = createSession({
-            tutor: tutor.email,
-            student: user.email,
-            date: dateParam || new Date().toISOString().split('T')[0],
-            time: timeParam || "4:00 PM"
+    try {
+        const res = await fetch("/api/bookings", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                tutorId: tutor.id,
+                date: dateParam,
+                time: timeParam
+            })
         });
-        
+
+        const data = await res.json();
+        if(data.success && data.booking) {
+             alert(`Payment Successful! Booking Confirmed with ${tutor.name}`);
+             router.push("/dashboard");
+        } else {
+             alert("Booking failed: " + (data.error || "Unknown error"));
+        }
+    } catch(err) {
+        alert("An error occurred during payment processing");
+    } finally {
         setLoading(false);
         setIsChapaProcessing(false);
-        alert(`Payment Successful! Booking Confirmed with ${tutor.name}`);
-        router.push("/dashboard");
-    }, 2000);
+    }
   };
 
   return (

@@ -1,24 +1,13 @@
 import { create } from "zustand";
-import { addTutor, addParent } from "@/lib/tutors";
-
-
-interface SignupFields {
-  role: "parent" | "tutor";
-  name: string;
-  phone: string;
-  subjects?: string[];
-  bio?: string;
-  avatar?: string;
-}
 
 export interface User {
+  id: string;
   email: string;
-  role: "parent" | "tutor";
+  role: "STUDENT" | "TUTOR" | "ADMIN";
   name: string;
-  phone: string;
-  subjects?: string[];
-  bio?: string;
   avatar?: string;
+  bio?: string;
+  subjects?: string[];
 }
 
 interface AuthState {
@@ -27,83 +16,80 @@ interface AuthState {
   isAuthenticated: boolean;
   error: string | null;
   login: (email: string, password: string) => Promise<void>;
-  signup: (email: string, password: string, fields: SignupFields) => Promise<void>;
-  logout: () => void;
+  register: (data: any) => Promise<void>;
+  logout: () => Promise<void>;
+  checkSession: () => Promise<void>;
 }
 
-export const useAuthStore = create<AuthState>((set) => {
-  // Try to load user from localStorage
-  let initialUser = null;
-  if (typeof window !== "undefined") {
-    const stored = localStorage.getItem("tutorly_user");
-    if (stored) initialUser = JSON.parse(stored);
-  }
-  return {
-    user: initialUser,
-    isAuthenticated: initialUser !== null,
-    loading: false,
-    error: null,
-    login: async (email, password) => {
-      set({ loading: true, error: null });
-      await new Promise((r) => setTimeout(r, 800));
-      // Load all users from localStorage
-      let users: any[] = [];
-      if (typeof window !== "undefined") {
-        const stored = localStorage.getItem("tutorly_all_users");
-        if (stored) users = JSON.parse(stored);
-      }
-      // Demo user fallback
-      if (email === "demo@tutorly.com" && password === "password") {
-        const demoUser: User = {
-          email,
-          role: "tutor",
-          name: "Demo User",
-          phone: "000-000-0000",
-        };
-        set({ user: demoUser, loading: false, isAuthenticated: true });
-        if (typeof window !== "undefined") localStorage.setItem("tutorly_user", JSON.stringify(demoUser));
-        return;
-      }
-      // Find user
-      const found = users.find(u => u.email === email && u.password === password);
-      if (found) {
-        set({ user: found, loading: false, isAuthenticated: true });
-        if (typeof window !== "undefined") localStorage.setItem("tutorly_user", JSON.stringify(found));
+export const useAuthStore = create<AuthState>((set) => ({
+  user: null,
+  isAuthenticated: false,
+  loading: true,
+  error: null,
+
+  login: async (email, password) => {
+    set({ loading: true, error: null });
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+      if (!data.success) throw new Error(data.error);
+
+      set({ user: data.data.user, isAuthenticated: true, loading: false });
+    } catch (err: any) {
+      set({ error: err.message, loading: false });
+      throw err;
+    }
+  },
+
+  register: async (regData) => {
+    set({ loading: true, error: null });
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(regData),
+      });
+
+      const data = await res.json();
+      if (!data.success) throw new Error(data.error);
+
+      set({ user: data.data.user, isAuthenticated: true, loading: false });
+    } catch (err: any) {
+      set({ error: err.message, loading: false });
+      throw err;
+    }
+  },
+
+  logout: async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+    } catch (e) {
+      console.error(e);
+    }
+    set({ user: null, isAuthenticated: false });
+    // Optional: Redirect or reload
+    window.location.href = '/login';
+  },
+
+  checkSession: async () => {
+    set({ loading: true });
+    try {
+      const res = await fetch("/api/auth/me");
+      const data = await res.json();
+      if (data.success) {
+        set({ user: data.data.user, isAuthenticated: true });
       } else {
-        set({ error: "Invalid credentials", loading: false });
+        set({ user: null, isAuthenticated: false });
       }
-    },
-    signup: async (email, password, fields) => {
-      set({ loading: true, error: null });
-      await new Promise((r) => setTimeout(r, 800));
-      const user = { email, password, ...fields };
-      // Save to all users
-      let users: any[] = [];
-      if (typeof window !== "undefined") {
-        const stored = localStorage.getItem("tutorly_all_users");
-        if (stored) users = JSON.parse(stored);
-      }
-      users.push(user);
-      if (typeof window !== "undefined") localStorage.setItem("tutorly_all_users", JSON.stringify(users));
-      if (fields.role === "tutor") {
-        addTutor({
-          id: Math.random().toString(36).slice(2, 10),
-          email,
-          name: fields.name,
-          subjects: fields.subjects || [],
-          bio: fields.bio || "",
-          avatar: fields.avatar || "",
-          rating: 5.0,
-          hourlyPrice: 40,
-          reviews: 0,
-        });
-      }
-      set({ user, loading: false, isAuthenticated: true });
-      if (typeof window !== "undefined") localStorage.setItem("tutorly_user", JSON.stringify(user));
-    },
-    logout: () => {
+    } catch (err) {
       set({ user: null, isAuthenticated: false });
-      if (typeof window !== "undefined") localStorage.removeItem("tutorly_user");
-    },
-  };
-});
+    } finally {
+      set({ loading: false });
+    }
+  },
+}));

@@ -37,28 +37,32 @@ const data = [
 const CHILD_EMAIL = "student@example.com";
 
 export default function Dashboard() {
-  const { user, isAuthenticated } = useAuthStore();
+  const { user, isAuthenticated, checkSession } = useAuthStore();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [sessions, setSessions] = useState<any[]>([]);
-  
-    // useEffect(() => {
-    //   console.log("Fetching sessions for child:", CHILD_EMAIL);
-    //   setSessions(getSessionsForUser(CHILD_EMAIL));
-    //   console.log("Fetched sessions:", sessions);
-    // }, []);
-
-    console.log("Fetching sessions for child:", getSessionsForUser(user?.email || CHILD_EMAIL));
 
   useEffect(() => {
-    setSessions(getSessionsForUser(user?.email || CHILD_EMAIL));
-    // Simulate loading/auth check
-    if (!isAuthenticated) {
-      router.push("/login");
-    } else {
-      setTimeout(() => setLoading(false), 500);
+    checkSession();
+  }, [checkSession]);
+
+  useEffect(() => {
+    if (!isAuthenticated && !loading) {
+       router.push("/login");
+       return;
     }
-  }, [isAuthenticated, router]);
+
+    if (isAuthenticated) {
+        fetch('/api/sessions')
+        .then(res => res.json())
+        .then(data => {
+            if(data.success) {
+                setSessions(data.data);
+            }
+            setLoading(false);
+        });
+    }
+  }, [isAuthenticated, loading, router]);
 
   const handleSesionJoin = (sessionId: string) => {
     router.push(`/dashboard/session/${sessionId}`);
