@@ -19,7 +19,7 @@ export function handleApiError(error: any) {
   console.error("API Error:", error);
 
   if (error instanceof ZodError) {
-    const message = error.errors.map((e) => `${e.path.join(".")}: ${e.message}`).join(", ");
+    const message = error.issues.map((e) => `${e.path.join(".")}: ${e.message}`).join(", ");
     return errorResponse(message, { status: 400 });
   }
 
