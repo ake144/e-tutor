@@ -59,5 +59,37 @@ export const BookingService = {
           where: { id: bookingId },
           data: { status: "CONFIRMED", meetingUrl: `https://meet.jit.si/${bookingId}` } // Generate meeting link
       });
+  },
+
+  async getUserSessions(userId: string) {
+      const bookings = await prisma.booking.findMany({
+          where: {
+              OR: [
+                  { studentId: userId },
+                  { tutor: { userId: userId } }
+              ],
+              status: "CONFIRMED"
+          },
+          include: {
+              tutor: {
+                  include: {
+                      user: true
+                  }
+              },
+              student: true
+          },
+          orderBy: {
+              startTime: 'asc'
+          }
+      });
+
+      return bookings.map(b => ({
+          id: b.id,
+          tutor: b.tutor.user.name,
+          student: b.student.name,
+          date: b.startTime.toISOString().split('T')[0],
+          time: b.startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          subject: b.tutor.subjects[0] || "General"
+      }));
   }
 };

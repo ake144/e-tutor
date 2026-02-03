@@ -1,0 +1,44 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: tutor-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: tutor
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - tutor-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: tutor-frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://postgres:password@db:5432/tutor?schema=public
+      JWT_SECRET_KEY: "change_this_secret_in_prod"
+      NEXT_PUBLIC_API_URL: http://localhost:3000/api
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - tutor-network
+
+volumes:
+  postgres_data:
+
+networks:
+  tutor-network:
+    driver: bridge
