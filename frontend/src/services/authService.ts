@@ -8,6 +8,7 @@ const RegisterSchema = z.object({
   password: z.string().min(6),
   name: z.string().min(2),
   role: z.enum(["STUDENT", "TUTOR"]).optional(),
+  phone:z.string().min(10).max(15).optional(),
 });
 
 const LoginSchema = z.object({

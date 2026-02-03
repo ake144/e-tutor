@@ -83,7 +83,7 @@ export const BookingService = {
           }
       });
 
-      return bookings.map(b => ({
+      return bookings.map((b: any) => ({
           id: b.id,
           tutor: b.tutor.user.name,
           student: b.student.name,

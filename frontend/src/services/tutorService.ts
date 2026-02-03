@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { Anybody } from "next/font/google";
 
 export const TutorService = {
   async getAllTutors(filters?: { subject?: string; maxPrice?: number }) {
@@ -32,7 +33,7 @@ export const TutorService = {
     });
 
     // Transform to frontend friendly format
-    return tutors.map(t => ({
+    return tutors.map((t: any) => ({
       id: t.tutorProfile?.id || "",
       userId: t.id,
       name: t.name,

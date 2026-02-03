@@ -21,7 +21,7 @@ export default function SignupPage() {
   const [avatar, setAvatar] = useState("");
   const [formError, setFormError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { signup, error, user } = useAuthStore();
+  const { register, error, user } = useAuthStore();
   const router = useRouter();
 
   useEffect(() => {
@@ -58,7 +58,7 @@ export default function SignupPage() {
     
     setIsSubmitting(true);
     try {
-        await signup(email, password, {
+        await register({email, password, 
           role,
           name,
           phone,

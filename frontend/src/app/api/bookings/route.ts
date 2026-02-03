@@ -8,9 +8,8 @@ export async function POST(req: NextRequest) {
     const token = req.cookies.get("token")?.value;
     if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     
-    const userPayload = await verifyAuth(token);
-    // @ts-ignore
-    const userId = userPayload.id; // Assuming payload has ID
+    const userPayload = await verifyAuth(token) as { id: string };
+    const userId = userPayload.id;
 
     // 2. Parse Body
     const body = await req.json();
