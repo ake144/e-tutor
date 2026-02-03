@@ -15,12 +15,13 @@ export default function Whiteboard({ sessionId, user }: WhiteboardProps) {
     if (!ctx) return;
     let drawing = false;
     function start(e: MouseEvent) {
+      if (!ctx) return;
       drawing = true;
       ctx.beginPath();
       ctx.moveTo(e.offsetX, e.offsetY);
     }
     function draw(e: MouseEvent) {
-      if (!drawing) return;
+      if (!drawing || !ctx) return;
       ctx.lineTo(e.offsetX, e.offsetY);
       ctx.strokeStyle = "#2563eb";
       ctx.lineWidth = 3;
@@ -28,7 +29,7 @@ export default function Whiteboard({ sessionId, user }: WhiteboardProps) {
     }
     function end() {
       drawing = false;
-      ctx.closePath();
+      ctx?.closePath();
     }
     canvas.addEventListener("mousedown", start);
     canvas.addEventListener("mousemove", draw);

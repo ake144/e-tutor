@@ -10,7 +10,7 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 RUN \
   if [ -f package-lock.json ]; then npm ci; \
-  else echo "Warning: Lockfile not found. It is recommended to commit lockfiles to version control." && npm install; \
+  else echo "Error: package-lock.json not found. Aborting build to ensure reproducible dependency installs." >&2; exit 1; \
   fi
 
 
@@ -31,7 +31,7 @@ RUN npm run build
 FROM base AS runner
 WORKDIR /app
 
-ENV NODE_ENV production
+ENV NODE_ENV development
 # Uncomment the following line in case you want to disable telemetry during runtime.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
