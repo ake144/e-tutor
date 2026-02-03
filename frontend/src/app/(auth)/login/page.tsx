@@ -9,7 +9,8 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [formError, setFormError] = useState<string | null>(null);
-  const { login, loading, error, user } = useAuthStore();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { login, error, user } = useAuthStore();
   const router = useRouter();
 
   useEffect(() => {
@@ -25,7 +26,15 @@ export default function LoginPage() {
       setFormError("All fields are required.");
       return;
     }
-    await login(email, password);
+    
+    setIsSubmitting(true);
+    try {
+        await login(email, password);
+    } catch (err) {
+        // Error is handled by store
+    } finally {
+        setIsSubmitting(false);
+    }
     // Redirect will happen in useEffect
   }
 
@@ -71,10 +80,10 @@ export default function LoginPage() {
           )}
           <button
             className="w-full py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg font-bold text-lg shadow hover:from-blue-600 hover:to-purple-600 transition disabled:opacity-60"
-            disabled={loading}
+            disabled={isSubmitting}
             type="submit"
           >
-            {loading ? "Signing In..." : "Sign In"}
+            {isSubmitting ? "Signing In..." : "Sign In"}
           </button>
         </form>
         <p className="mt-6 text-center text-sm text-gray-500">Don’t have an account? <a href="/signup" className="text-blue-600 hover:underline font-semibold">Sign up</a></p>

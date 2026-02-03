@@ -20,7 +20,8 @@ export default function SignupPage() {
   const [bio, setBio] = useState("");
   const [avatar, setAvatar] = useState("");
   const [formError, setFormError] = useState<string | null>(null);
-  const { signup, loading, error, user } = useAuthStore();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { signup, error, user } = useAuthStore();
   const router = useRouter();
 
   useEffect(() => {
@@ -54,13 +55,20 @@ export default function SignupPage() {
         return;
       }
     }
-    // Pass all info to signup (extend your store to handle extra fields/roles as needed)
-    await signup(email, password, {
-      role,
-      name,
-      phone,
-      ...(role === "tutor" ? { subjects, bio, avatar } : {}),
-    });
+    
+    setIsSubmitting(true);
+    try {
+        await signup(email, password, {
+          role,
+          name,
+          phone,
+          ...(role === "tutor" ? { subjects, bio, avatar } : {}),
+        });
+    } catch (err) {
+        // Error handling if signup throws
+    } finally {
+        setIsSubmitting(false);
+    }
     // Redirect will happen in useEffect
   }
 
@@ -211,10 +219,10 @@ export default function SignupPage() {
           )}
           <button
             className="w-full py-2 bg-gradient-to-r from-blue-500 to-green-400 text-white rounded-lg font-bold text-lg shadow hover:from-blue-600 hover:to-green-500 transition disabled:opacity-60"
-            disabled={loading}
+            disabled={isSubmitting}
             type="submit"
           >
-            {loading ? "Signing Up..." : "Sign Up"}
+            {isSubmitting ? "Signing Up..." : "Sign Up"}
           </button>
         </form>
         <p className="mt-6 text-center text-sm text-gray-500">Already have an account? <a href="/login" className="text-blue-600 hover:underline font-semibold">Sign in</a></p>
