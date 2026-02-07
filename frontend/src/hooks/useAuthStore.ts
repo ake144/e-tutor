@@ -71,7 +71,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     } catch (e) {
       console.error(e);
     }
-    set({ user: null, isAuthenticated: false });
+    set({ user: null, isAuthenticated: false , loading: false });
     // Optional: Redirect or reload
     window.location.href = '/login';
   },
@@ -82,12 +82,12 @@ export const useAuthStore = create<AuthState>((set) => ({
       const res = await fetch("/api/auth/me");
       const data = await res.json();
       if (data.success) {
-        set({ user: data.data.user, isAuthenticated: true });
+        set({ user: data.data.user, isAuthenticated: true, loading: false });
       } else {
-        set({ user: null, isAuthenticated: false });
+        set({ user: null, isAuthenticated: false, loading: false });
       }
     } catch (err) {
-      set({ user: null, isAuthenticated: false });
+      set({ user: null, isAuthenticated: false, loading: false });
     } finally {
       set({ loading: false });
     }
