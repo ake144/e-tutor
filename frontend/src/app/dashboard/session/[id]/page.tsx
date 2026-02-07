@@ -3,7 +3,6 @@
 import { useState } from "react";
 import VideoRoom from "@/components/VideoRoom";
 import CollaborativeNotebook from "@/components/CollaborativeNotebook";
-import Whiteboard from "@/components/Whiteboard";
 import Chat from "@/components/Chat";
 import { useParams, useRouter } from "next/navigation";
 import { useAuthStore } from "@/hooks/useAuthStore";
@@ -12,7 +11,6 @@ import { getSessionById } from "@/lib/sessions";
 import { 
   FaChevronLeft, 
   FaVideo, 
-  FaChalkboard, 
   FaBookOpen, 
   FaComments, 
   FaUsers,
@@ -28,7 +26,6 @@ export default function SessionPage() {
   const session = typeof window !== "undefined" ? getSessionById(sessionId) : null;
   
   // UI State
-  const [activeTab, setActiveTab] = useState<'whiteboard' | 'notebook'>('whiteboard');
   const [sidebarView, setSidebarView] = useState<'chat' | 'participants'>('chat');
 
   const handleExit = () => {
@@ -95,32 +92,13 @@ export default function SessionPage() {
 
                 {/* Tools Area */}
                 <div className="flex-1 bg-white rounded-2xl shadow-sm border border-gray-200 flex flex-col overflow-hidden min-h-[400px]">
-                    {/* Tool Tabs */}
-                    <div className="flex border-b border-gray-200">
-                        <button 
-                            onClick={() => setActiveTab('whiteboard')}
-                            className={`flex-1 py-3 text-sm font-bold flex items-center justify-center gap-2 transition ${activeTab === 'whiteboard' ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50' : 'text-gray-500 hover:bg-gray-50'}`}
-                        >
-                            <FaChalkboard /> Whiteboard
-                        </button>
-                        <button 
-                            onClick={() => setActiveTab('notebook')}
-                            className={`flex-1 py-3 text-sm font-bold flex items-center justify-center gap-2 transition ${activeTab === 'notebook' ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50' : 'text-gray-500 hover:bg-gray-50'}`}
-                        >
-                            <FaBookOpen /> Collaborative Notes
-                        </button>
+                    <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-200 bg-gray-50">
+                        <FaBookOpen className="text-blue-600" />
+                        <h3 className="text-sm font-bold text-gray-700">Collaborative Notes</h3>
+                        <span className="ml-auto text-[10px] uppercase tracking-wider text-gray-400">Whiteboard via camera</span>
                     </div>
-                    
-                    {/* Tool Content */}
-                    <div className="flex-1 p-0 relative bg-gray-50">
-                        <div className={`absolute inset-0 transition-opacity duration-300 ${activeTab === 'whiteboard' ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}>
-                             <Whiteboard sessionId={sessionId} user={user} />
-                        </div>
-                         <div className={`absolute inset-0 transition-opacity duration-300 ${activeTab === 'notebook' ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}>
-                             <div className="h-full p-4 overflow-auto">
-                                <CollaborativeNotebook sessionId={sessionId} user={user} />
-                             </div>
-                        </div>
+                    <div className="flex-1 p-4 overflow-auto bg-gray-50">
+                        <CollaborativeNotebook sessionId={sessionId} user={user} />
                     </div>
                 </div>
             </div>

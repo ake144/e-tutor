@@ -3,7 +3,7 @@ import { create } from "zustand";
 export interface User {
   id: string;
   email: string;
-  role: "STUDENT" | "TUTOR" | "ADMIN";
+  role: "STUDENT" | "TUTOR" | "PARENT" | "ADMIN";
   name: string;
   avatar?: string;
   bio?: string;

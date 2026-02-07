@@ -14,7 +14,7 @@ export default function Home() {
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold text-center text-blue-800">Smart, Fun, and Safe Online Tutoring for Kids</h1>
           <p className="text-lg text-gray-600 text-center max-w-xl">
-            Real-time video lessons, collaborative notes, interactive whiteboard, and strong parental controls—all in one playful platform.
+            Real-time video lessons, collaborative notes, camera-based whiteboard, and strong parental controls—all in one playful platform.
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-4 w-full justify-center mb-8">

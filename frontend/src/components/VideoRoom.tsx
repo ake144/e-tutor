@@ -79,8 +79,8 @@ export default function VideoRoom({ sessionId, user }: VideoRoomProps) {
             - If I am Student: I listen for commands
         */}
         <StudentCameraManager 
-            bookingId={sessionId} 
-            isStudent={user?.role === 'STUDENT' || user?.role === 'PARENT'} 
+          bookingId={sessionId} 
+          role={user?.role as any}
         />
 
         {/* Custom styled control bar overlay */}
