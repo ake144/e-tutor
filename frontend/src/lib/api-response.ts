@@ -24,6 +24,9 @@ export function handleApiError(error: any) {
   }
 
   if (error instanceof Error) {
+    if (error.message === "Invalid token" || error.message === "Unauthorized") {
+        return errorResponse(error.message, { status: 401 });
+    }
     return errorResponse(error.message, { status: 500 }); // Or map specific errors to 400/401/403/404
   }
 

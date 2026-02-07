@@ -9,11 +9,16 @@ export async function POST(req: NextRequest) {
 
     const response = successResponse({ user });
 
+    // Force secure to false if not strictly production, and log it to be sure
+    const isProduction = process.env.NODE_ENV === "production";
+    console.log(`[API/LOGIN] Setting cookie. NODE_ENV=${process.env.NODE_ENV}, Secure=${isProduction}`);
+
     response.cookies.set("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: isProduction, 
       maxAge: 60 * 60 * 24, // 1 day
       path: "/",
+      sameSite: "lax",
     });
 
     return response;

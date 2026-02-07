@@ -1,23 +1,19 @@
 'use client';
 
-
 import { useAuthStore } from "@/hooks/useAuthStore";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { user, loading, checkSession } = useAuthStore();
+  const { user, isAuthenticated, loading } = useAuthStore();
   const router = useRouter();
 
   useEffect(() => {
-    checkSession();
-  }, [checkSession]);
-
-  useEffect(() => {
-    if (!loading && !user) {
+    // Only redirect if explicitly not loading and not authenticated
+    if (!loading && !isAuthenticated) {
       router.replace("/login");
     }
-  }, [user, loading, router]);
+  }, [isAuthenticated, loading, router]);
 
   if (loading) {
     return (
@@ -27,8 +23,10 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
     );
   }
 
-  if (!user) {
-    return null; // Don't render anything while redirecting
+  // If we are here, we are either authenticated or about to redirect.
+  // Rendering children if user is present is safer.
+  if (!isAuthenticated) {
+    return null; 
   }
   
   return <>{children}</>;

@@ -6,12 +6,8 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { user, loading, checkSession } = useAuthStore();
+  const { user, loading } = useAuthStore();
   const router = useRouter();
-
-  useEffect(() => {
-    checkSession();
-  }, [checkSession]);
 
   useEffect(() => {
     if (!loading && !user) {

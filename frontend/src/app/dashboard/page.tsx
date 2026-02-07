@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import { useRouter } from "next/navigation";
 import {
@@ -37,38 +37,54 @@ const data = [
 const CHILD_EMAIL = "student@example.com";
 
 export default function Dashboard() {
-  const { user, isAuthenticated, checkSession } = useAuthStore();
+  const { user, isAuthenticated, checkSession, loading: authLoading } = useAuthStore();
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
+  
+  // Local loading state for dashboard-specific data
+  const [dataLoading, setDataLoading] = useState(false);
   const [sessions, setSessions] = useState<any[]>([]);
+  const hasCheckedSession = useRef(false);
 
+  // We rely on AuthProvider or DashboardLayout to trigger initial session checks if needed.
+  // We do NOT call checkSession() here to avoid loops with the Layout's protection logic.
+  
   useEffect(() => {
-    checkSession();
-  }, [checkSession]);
+    // If auth is still loading, wait.
+    if (authLoading) return;
 
-  useEffect(() => {
-    if (!isAuthenticated && !loading) {
-       router.push("/login");
-       return;
+    // If not authenticated, redirect.
+    if (!isAuthenticated) {
+        router.push("/login");
+        return;
     }
 
-    if (isAuthenticated) {
-        fetch('/api/sessions')
-        .then(res => res.json())
-        .then(data => {
-            if(data.success) {
-                setSessions(data.data);
+    // User is authenticated, fetch sessions.
+    const fetchSessions = async () => {
+        setDataLoading(true);
+        try {
+            const res = await fetch('/api/sessions', { credentials: 'include' });
+            if (res.ok) {
+                const data = await res.json();
+                if (data.success) {
+                    setSessions(data.data);
+                }
             }
-            setLoading(false);
-        });
-    }
-  }, [isAuthenticated, loading, router]);
+        } catch (error) {
+            console.error("Failed to fetch sessions:", error);
+        } finally {
+            setDataLoading(false);
+        }
+    };
+
+    fetchSessions();
+  }, [isAuthenticated, authLoading, router]);
 
   const handleSesionJoin = (sessionId: string) => {
     router.push(`/dashboard/session/${sessionId}`);
   };
 
-  if (loading) {
+  // Show spinner if checking auth OR loading data
+  if (authLoading || dataLoading) {
     return (
       <div className="flex h-screen w-full items-center justify-center bg-gray-50">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>

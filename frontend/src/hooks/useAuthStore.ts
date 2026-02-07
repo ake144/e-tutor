@@ -79,16 +79,46 @@ export const useAuthStore = create<AuthState>((set) => ({
   checkSession: async () => {
     set({ loading: true });
     try {
-      const res = await fetch("/api/auth/me");
+      // Add no-store and timestamp to prevent caching of auth state
+      // credentials: 'include' ensures cookies are sent even if browser thinks it's cross-site (though it shouldn't be)
+      const res = await fetch(`/api/auth/me?t=${Date.now()}`, { 
+        cache: "no-store",
+        headers: { "Cache-Control": "no-cache" },
+        credentials: "include"
+      });
+      
+      // If unauthorized, not found, or server error -> Clear session
+      if (!res.ok) {
+         console.error(`Session check failed with status: ${res.status}`);
+         if (res.status === 401 || res.status === 403) {
+             // Do NOT call logout endpoint here as it might cause loops if the endpoint is also protected or redirects
+             // Just clear local state. Use set() to avoid triggering listeners excessively if possible.
+             // Also, setting isAuthenticated false will likely trigger a redirect in ProtectedLayout.
+             set({ user: null, isAuthenticated: false });
+         }
+         // For 500s, we probably shouldn't logout technically, but if we can't verify identity...
+         // Let's safe fail to logged out to avoid infinite loops if the error is persistent
+         if (res.status >= 500) {
+             // Maybe don't call logout endpoint, just clear local state?
+             set({ user: null, isAuthenticated: false }); 
+         }
+         return;
+      }
+
       const data = await res.json();
       if (data.success) {
-        set({ user: data.data.user, isAuthenticated: true, loading: false });
+        set({ user: data.data.user, isAuthenticated: true });
       } else {
-        set({ user: null, isAuthenticated: false, loading: false });
+         console.warn("Session check returned success:false", data);
+         // Do not hit logout endpoint, just clear local state
+         set({ user: null, isAuthenticated: false });
       }
     } catch (err) {
-      set({ user: null, isAuthenticated: false, loading: false });
+      console.error("Session check failed, clearing local session", err);
+      // Do not hit logout endpoint, just clear local state
+      set({ user: null, isAuthenticated: false });
     } finally {
+      // ALWAYS set loading to false to prevent infinite spinners
       set({ loading: false });
     }
   },

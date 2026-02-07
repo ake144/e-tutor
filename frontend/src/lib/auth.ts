@@ -16,6 +16,7 @@ export async function verifyAuth(token: string) {
     const verified = await jwtVerify(token, getJwtSecretKey());
     return verified.payload;
   } catch (err) {
+    console.error("JWT Verification Error:", err);
     throw new Error("Invalid token");
   }
 }
