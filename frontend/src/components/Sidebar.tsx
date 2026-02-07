@@ -39,12 +39,15 @@ export default function Sidebar() {
           active={pathname === "/calendar"} 
           onClick={() => router.push("/calendar")}
         />
-        <NavItem
-          icon={<FaChalkboardTeacher />}
-          label="Tutors"
-          active={pathname === "/tutors"}
-          onClick={() => router.push("/tutors")}
-        />
+        {user.role !== "TUTOR" && (
+          <NavItem
+            icon={<FaChalkboardTeacher />}
+            label="Tutors"
+            active={pathname === "/tutors"}
+            onClick={() => router.push("/tutors")}
+          />
+        )}
+
         <NavItem 
           icon={<FaCog />} 
           label="Settings" 
