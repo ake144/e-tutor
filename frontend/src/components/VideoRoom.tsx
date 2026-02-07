@@ -9,10 +9,11 @@ import {
 import "@livekit/components-styles";
 import { useEffect, useState } from "react";
 import { TutorControls } from "./TutorControls";
+import { StudentCameraManager } from "./StudentCameraManager";
 
 type VideoRoomProps = {
   sessionId: string;
-  user: { email: string } | null;
+  user: { email: string; role?: string } | null;
 };
 
 export default function VideoRoom({ sessionId, user }: VideoRoomProps) {
@@ -70,8 +71,17 @@ export default function VideoRoom({ sessionId, user }: VideoRoomProps) {
              <VideoConference />
         </div>
         
-        {/* Tutor Controls for Dual Camera */}
-        <TutorControls />
+        {/* Tutor Controls for Dual Camera (for Tutor Himself) */}
+        {user?.role === 'TUTOR' && <TutorControls />}
+
+        {/* Remote Manager: 
+            - If I am Tutor: I see a button to switch Student's camera 
+            - If I am Student: I listen for commands
+        */}
+        <StudentCameraManager 
+            bookingId={sessionId} 
+            isStudent={user?.role === 'STUDENT' || user?.role === 'PARENT'} 
+        />
 
         {/* Custom styled control bar overlay */}
         {/* <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center justify-center w-full pointer-events-none">

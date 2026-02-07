@@ -66,6 +66,7 @@ model Booking {
   totalPrice Decimal
   
   meetingUrl String?      // Generated LiveKit/Video room ID
+  studentCameraMode String? // Stores the preferred camera Device ID or 'front'/'back'
   
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
