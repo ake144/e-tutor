@@ -16,6 +16,7 @@ import {
   FaShieldAlt,
   FaCheckCircle
 } from "react-icons/fa";
+import { ChapaButton } from "@/components/dashboard/chapaChekout";
 
 function CheckoutContent() {
   const searchParams = useSearchParams();
@@ -57,6 +58,8 @@ function CheckoutContent() {
   const sessionPrice = tutor.hourlyPrice;
   const serviceFee = 3.00;
   const total = sessionPrice + serviceFee;
+
+  const txRef = `booking-${tutor.id}-${Date.now()}`;
   
   // Format Date
   const displayDate = dateParam ? new Date(dateParam).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) : "Mon, Oct 24, 2023";
@@ -115,21 +118,22 @@ function CheckoutContent() {
                             <FaCreditCard /> Credit Card
                         </button>
                         <button 
+                           onClick={()=> setPaymentMethod("chapa")}
+                           className={`flex-1 py-3 px-4 rounded-xl border flex items-center justify-center gap-2 font-medium transition ${paymentMethod === 'chapa' ? 'border-blue-600 bg-blue-50 text-blue-700' : 'border-gray-200 text-gray-600 hover:bg-gray-50'}`}
+                        >
+                            <FaCheckCircle /> Chapa Pay
+                        </button>
+                        <button 
                             onClick={() => setPaymentMethod("paypal")}
                             className={`flex-1 py-3 px-4 rounded-xl border flex items-center justify-center gap-2 font-medium transition ${paymentMethod === 'paypal' ? 'border-blue-600 bg-blue-50 text-blue-700' : 'border-gray-200 text-gray-600 hover:bg-gray-50'}`}
                         >
                             <FaPaypal /> PayPal
                         </button>
-                        <button 
-                            onClick={() => setPaymentMethod("apple")}
-                            className={`flex-1 py-3 px-4 rounded-xl border flex items-center justify-center gap-2 font-medium transition ${paymentMethod === 'apple' ? 'border-blue-600 bg-blue-50 text-blue-700' : 'border-gray-200 text-gray-600 hover:bg-gray-50'}`}
-                        >
-                            <FaApple /> Apple Pay
-                        </button>
                     </div>
                 </section>
 
                 {/* Card Fields */}
+                {paymentMethod === "card" && (
                 <section className="space-y-4">
                     <div>
                         <label className="block text-sm font-bold text-gray-700 mb-2">Name on Card</label>
@@ -160,15 +164,28 @@ function CheckoutContent() {
                          <input type="text" placeholder="90210" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white" />
                     </div>
                 </section>
+                )}
 
+                {
+                    paymentMethod === "chapa" && (
+                         <ChapaButton
+                            amount={total}
+                            email={user.email}
+                            firstName={user.name.split(' ')[0]}
+                            lastName={user.name.split(' ')[1] || ''}
+                            txRef={txRef}
+                            phone_number={(user as any).phone || ''}
+                            courseSlug={tutor.id}
+                        />
+                )}
                 {/* Discount Code */}
-                <section>
-                    <label className="block text-sm font-bold text-gray-700 mb-2">Discount Code</label>
-                    <div className="flex gap-2">
+                {/* <section>
+                     <label className="block text-sm font-bold text-gray-700 mb-2">Discount Code</label>
+                     <div className="flex gap-2">
                          <input type="text" placeholder="Paste code here" className="flex-1 px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white" />
-                         <button className="px-6 py-3 bg-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-300 transition">Apply</button>
-                    </div>
-                </section>
+                          <button className="px-6 py-3 bg-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-300 transition">Apply</button>
+                     </div>
+                 </section> */}
 
                 {/* Subscription */}
                 <div className="p-4 bg-blue-50 rounded-xl border border-blue-100 flex items-start gap-4">
