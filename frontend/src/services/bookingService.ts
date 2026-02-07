@@ -17,8 +17,18 @@ export const BookingService = {
 
     if (!tutor) throw new Error("Tutor not found");
 
-    // 2. Parse DateTime (Simplified for example)
-    const startTime = new Date(`${data.date}T${data.time}:00`);
+    // 2. Parse DateTime with AM/PM Support
+    let timeStr = data.time.trim(); // "10:00 AM"
+    // Convert 12h to 24h if needed
+    if (timeStr.match(/PM|AM/i)) {
+      const [time, modifier] = timeStr.split(' ');
+      let [hours, minutes] = time.split(':');
+      if (hours === '12') hours = '00';
+      if (modifier.toUpperCase() === 'PM') hours = String(parseInt(hours, 10) + 12);
+      timeStr = `${hours}:${minutes}`;
+    }
+
+    const startTime = new Date(`${data.date}T${timeStr}:00`);
     const endTime = new Date(startTime.getTime() + 60 * 60 * 1000); // 1 Hour session
 
     // 3. Check Availability (Check for overlapping bookings)
@@ -89,7 +99,8 @@ export const BookingService = {
           student: b.student.name,
           date: b.startTime.toISOString().split('T')[0],
           time: b.startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          subject: b.tutor.subjects[0] || "General"
+          subject: b.tutor.subjects[0] || "General",
+          meetingUrl: b.meetingUrl
       }));
   }
 };

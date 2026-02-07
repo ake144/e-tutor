@@ -13,20 +13,25 @@ import {
 } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 
-// Mock Data for Sessions
-const MOCK_SESSIONS = [
-    { id: 1, date: "2026-02-05", time: "10:00 AM", title: "Math Session", tutor: "Mr. Smith", type: "video" },
-    { id: 2, date: "2026-02-05", time: "02:00 PM", title: "Physics Review", tutor: "Ms. Johnson", type: "video" },
-    { id: 3, date: "2026-02-12", time: "11:00 AM", title: "Chemistry Lab", tutor: "Dr. Brown", type: "video" },
-    { id: 4, date: "2026-02-18", time: "09:00 AM", title: "English Lit", tutor: "Mrs. Davis", type: "video" },
-    { id: 5, date: "2026-02-24", time: "04:00 PM", title: "Math Session", tutor: "Mr. Smith", type: "video" },
-];
 
 export default function CalendarPage() {
     const { user } = useAuthStore();
     const router = useRouter();
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+    const [sessions, setSessions] = useState<any[]>([]);
+
+    useEffect(() => {
+        // Fetch real sessions
+        fetch('/api/sessions')
+            .then(res => res.json())
+            .then(data => {
+                if(data.success) {
+                    setSessions(data.data);
+                }
+            })
+            .catch(err => console.error("Failed to load sessions", err));
+    }, []);
 
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
@@ -60,7 +65,7 @@ export default function CalendarPage() {
 
     const getSessionsForDay = (day: number) => {
         const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        return MOCK_SESSIONS.filter(s => s.date === dateStr);
+        return sessions.filter(s => s.date === dateStr);
     };
 
     const selectedDaySessions = selectedDate 
@@ -183,13 +188,16 @@ export default function CalendarPage() {
                                                     <FaClock size={10} /> {session.time}
                                                 </span>
                                                 <span className="flex items-center gap-1 text-xs font-semibold text-gray-400 bg-gray-100 px-2 py-1 rounded-full">
-                                                    <FaVideo size={10} /> Zoom
+                                                    <FaVideo size={10} /> Live
                                                 </span>
                                             </div>
-                                            <h4 className="font-bold text-gray-800 mb-1">{session.title}</h4>
+                                            <h4 className="font-bold text-gray-800 mb-1">{session.subject || "Tutoring Session"}</h4>
                                             <p className="text-sm text-gray-500 mb-3">with {session.tutor}</p>
                                             
-                                            <button className="w-full bg-blue-600 text-white text-sm font-bold py-2 rounded-lg hover:bg-blue-700 transition opacity-0 group-hover:opacity-100">
+                                            <button 
+                                                onClick={() => router.push(`/dashboard/session/${session.id}`)}
+                                                className="w-full bg-blue-600 text-white text-sm font-bold py-2 rounded-lg hover:bg-blue-700 transition opacity-0 group-hover:opacity-100"
+                                            >
                                                 Join Session
                                             </button>
                                         </div>

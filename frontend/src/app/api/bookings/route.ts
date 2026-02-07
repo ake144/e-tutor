@@ -23,8 +23,12 @@ export async function POST(req: NextRequest) {
       time
     });
 
+    // Auto-confirm for now (Simulate Payment Success)
+    await BookingService.confirmBooking(booking.id, { method: 'mock' });
+    const confirmedBooking = { ...booking, status: 'CONFIRMED' };
+
     // 4. Return Response
-    return NextResponse.json({ success: true, booking });
+    return NextResponse.json({ success: true, booking: confirmedBooking });
 
   } catch (error: any) {
     return NextResponse.json(
