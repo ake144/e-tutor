@@ -24,12 +24,17 @@ services:
       dockerfile: Dockerfile
     container_name: tutor-frontend
     restart: always
+    user: root
     ports:
       - "3000:3000"
     environment:
       DATABASE_URL: postgresql://postgres:password@db:5432/tutor?schema=public
       JWT_SECRET_KEY: "change_this_secret_in_prod"
       NEXT_PUBLIC_API_URL: http://localhost:3000/api
+    command: npm run dev
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
     depends_on:
       db:
         condition: service_healthy

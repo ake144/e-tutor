@@ -1,0 +1,5 @@
+-- AlterEnum
+ALTER TYPE "Role" ADD VALUE 'PARENT';
+
+-- AlterTable
+-- ALTER TABLE "User" ALTER COLUMN "role" SET DEFAULT 'PARENT';

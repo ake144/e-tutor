@@ -9,7 +9,7 @@ import { FaUser, FaLock, FaEnvelope } from "react-icons/fa";
 
 export default function SignupPage() {
 
-  const [role, setRole] = useState<"parent" | "tutor">("parent");
+  const [role, setRole] = useState<"STUDENT" | "TUTOR">("STUDENT");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -49,7 +49,7 @@ export default function SignupPage() {
       setFormError("Passwords do not match.");
       return;
     }
-    if (role === "tutor") {
+    if (role === "TUTOR") {
       if (subjects.length === 0 || !bio || !avatar) {
         setFormError("All tutor fields are required.");
         return;
@@ -62,7 +62,7 @@ export default function SignupPage() {
           role,
           name,
           phone,
-          ...(role === "tutor" ? { subjects, bio, avatar } : {}),
+          ...(role === "TUTOR" ? { subjects, bio, avatar } : {}),
         });
     } catch (err) {
         // Error handling if signup throws
@@ -86,15 +86,15 @@ export default function SignupPage() {
           <div className="flex justify-center gap-4 mb-2">
             <button
               type="button"
-              className={`px-4 py-2 rounded-lg font-bold shadow transition border-2 ${role === "parent" ? "bg-blue-500 text-white border-blue-500" : "bg-white text-blue-700 border-blue-300"}`}
-              onClick={() => setRole("parent")}
+              className={`px-4 py-2 rounded-lg font-bold shadow transition border-2 ${role === "STUDENT" ? "bg-blue-500 text-white border-blue-500" : "bg-white text-blue-700 border-blue-300"}`}
+              onClick={() => setRole("STUDENT")}
             >
               Parent/Student
-            </button>
+            </button>         
             <button
               type="button"
-              className={`px-4 py-2 rounded-lg font-bold shadow transition border-2 ${role === "tutor" ? "bg-green-500 text-white border-green-500" : "bg-white text-green-700 border-green-300"}`}
-              onClick={() => setRole("tutor")}
+              className={`px-4 py-2 rounded-lg font-bold shadow transition border-2 ${role === "TUTOR" ? "bg-green-500 text-white border-green-500" : "bg-white text-green-700 border-green-300"}`}
+              onClick={() => setRole("TUTOR")}
             >
               Tutor
             </button>
@@ -174,7 +174,7 @@ export default function SignupPage() {
               required
             />
           </div>
-          {role === "tutor" && (
+          {role === "TUTOR" && (
             <>
               <div>
                 <label className="block text-sm font-medium mb-1 text-blue-700">Subjects</label>

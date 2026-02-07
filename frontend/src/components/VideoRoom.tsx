@@ -8,6 +8,7 @@ import {
 } from "@livekit/components-react";
 import "@livekit/components-styles";
 import { useEffect, useState } from "react";
+import { TutorControls } from "./TutorControls";
 
 type VideoRoomProps = {
   sessionId: string;
@@ -69,6 +70,9 @@ export default function VideoRoom({ sessionId, user }: VideoRoomProps) {
              <VideoConference />
         </div>
         
+        {/* Tutor Controls for Dual Camera */}
+        <TutorControls />
+
         {/* Custom styled control bar overlay */}
         {/* <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center justify-center w-full pointer-events-none">
              <div className="bg-gray-900/90 backdrop-blur-md p-2 rounded-2xl border border-gray-700 shadow-xl pointer-events-auto">
