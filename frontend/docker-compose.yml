@@ -20,7 +20,7 @@ services:
 
   frontend:
     build:
-      context: ./frontend
+      context: .
       dockerfile: Dockerfile
     container_name: tutor-frontend
     restart: always
@@ -33,7 +33,7 @@ services:
       NEXT_PUBLIC_API_URL: http://localhost:3000/api
     command: npm run dev
     volumes:
-      - .
+      - .:/app
       - /app/node_modules
       - /app/.next
     depends_on:

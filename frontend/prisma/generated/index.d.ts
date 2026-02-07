@@ -40,6 +40,7 @@ export type Review = $Result.DefaultSelection<Prisma.$ReviewPayload>
 export namespace $Enums {
   export const Role: {
   STUDENT: 'STUDENT',
+  PARENT: 'PARENT',
   TUTOR: 'TUTOR',
   ADMIN: 'ADMIN'
 };
@@ -3570,6 +3571,7 @@ export namespace Prisma {
     status: $Enums.BookingStatus | null
     totalPrice: Decimal | null
     meetingUrl: string | null
+    studentCameraMode: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -3583,6 +3585,7 @@ export namespace Prisma {
     status: $Enums.BookingStatus | null
     totalPrice: Decimal | null
     meetingUrl: string | null
+    studentCameraMode: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -3596,6 +3599,7 @@ export namespace Prisma {
     status: number
     totalPrice: number
     meetingUrl: number
+    studentCameraMode: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -3619,6 +3623,7 @@ export namespace Prisma {
     status?: true
     totalPrice?: true
     meetingUrl?: true
+    studentCameraMode?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3632,6 +3637,7 @@ export namespace Prisma {
     status?: true
     totalPrice?: true
     meetingUrl?: true
+    studentCameraMode?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3645,6 +3651,7 @@ export namespace Prisma {
     status?: true
     totalPrice?: true
     meetingUrl?: true
+    studentCameraMode?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -3745,6 +3752,7 @@ export namespace Prisma {
     status: $Enums.BookingStatus
     totalPrice: Decimal
     meetingUrl: string | null
+    studentCameraMode: string | null
     createdAt: Date
     updatedAt: Date
     _count: BookingCountAggregateOutputType | null
@@ -3777,6 +3785,7 @@ export namespace Prisma {
     status?: boolean
     totalPrice?: boolean
     meetingUrl?: boolean
+    studentCameraMode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     student?: boolean | UserDefaultArgs<ExtArgs>
@@ -3792,6 +3801,7 @@ export namespace Prisma {
     status?: boolean
     totalPrice?: boolean
     meetingUrl?: boolean
+    studentCameraMode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     student?: boolean | UserDefaultArgs<ExtArgs>
@@ -3807,6 +3817,7 @@ export namespace Prisma {
     status?: boolean
     totalPrice?: boolean
     meetingUrl?: boolean
+    studentCameraMode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     student?: boolean | UserDefaultArgs<ExtArgs>
@@ -3822,11 +3833,12 @@ export namespace Prisma {
     status?: boolean
     totalPrice?: boolean
     meetingUrl?: boolean
+    studentCameraMode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type BookingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "tutorId" | "startTime" | "endTime" | "status" | "totalPrice" | "meetingUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["booking"]>
+  export type BookingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "tutorId" | "startTime" | "endTime" | "status" | "totalPrice" | "meetingUrl" | "studentCameraMode" | "createdAt" | "updatedAt", ExtArgs["result"]["booking"]>
   export type BookingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | UserDefaultArgs<ExtArgs>
     tutor?: boolean | TutorProfileDefaultArgs<ExtArgs>
@@ -3855,6 +3867,7 @@ export namespace Prisma {
       status: $Enums.BookingStatus
       totalPrice: Prisma.Decimal
       meetingUrl: string | null
+      studentCameraMode: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["booking"]>
@@ -4290,6 +4303,7 @@ export namespace Prisma {
     readonly status: FieldRef<"Booking", 'BookingStatus'>
     readonly totalPrice: FieldRef<"Booking", 'Decimal'>
     readonly meetingUrl: FieldRef<"Booking", 'String'>
+    readonly studentCameraMode: FieldRef<"Booking", 'String'>
     readonly createdAt: FieldRef<"Booking", 'DateTime'>
     readonly updatedAt: FieldRef<"Booking", 'DateTime'>
   }
@@ -5848,6 +5862,7 @@ export namespace Prisma {
     status: 'status',
     totalPrice: 'totalPrice',
     meetingUrl: 'meetingUrl',
+    studentCameraMode: 'studentCameraMode',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -6185,6 +6200,7 @@ export namespace Prisma {
     status?: EnumBookingStatusFilter<"Booking"> | $Enums.BookingStatus
     totalPrice?: DecimalFilter<"Booking"> | Decimal | DecimalJsLike | number | string
     meetingUrl?: StringNullableFilter<"Booking"> | string | null
+    studentCameraMode?: StringNullableFilter<"Booking"> | string | null
     createdAt?: DateTimeFilter<"Booking"> | Date | string
     updatedAt?: DateTimeFilter<"Booking"> | Date | string
     student?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -6200,6 +6216,7 @@ export namespace Prisma {
     status?: SortOrder
     totalPrice?: SortOrder
     meetingUrl?: SortOrderInput | SortOrder
+    studentCameraMode?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     student?: UserOrderByWithRelationInput
@@ -6218,6 +6235,7 @@ export namespace Prisma {
     status?: EnumBookingStatusFilter<"Booking"> | $Enums.BookingStatus
     totalPrice?: DecimalFilter<"Booking"> | Decimal | DecimalJsLike | number | string
     meetingUrl?: StringNullableFilter<"Booking"> | string | null
+    studentCameraMode?: StringNullableFilter<"Booking"> | string | null
     createdAt?: DateTimeFilter<"Booking"> | Date | string
     updatedAt?: DateTimeFilter<"Booking"> | Date | string
     student?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -6233,6 +6251,7 @@ export namespace Prisma {
     status?: SortOrder
     totalPrice?: SortOrder
     meetingUrl?: SortOrderInput | SortOrder
+    studentCameraMode?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: BookingCountOrderByAggregateInput
@@ -6254,6 +6273,7 @@ export namespace Prisma {
     status?: EnumBookingStatusWithAggregatesFilter<"Booking"> | $Enums.BookingStatus
     totalPrice?: DecimalWithAggregatesFilter<"Booking"> | Decimal | DecimalJsLike | number | string
     meetingUrl?: StringNullableWithAggregatesFilter<"Booking"> | string | null
+    studentCameraMode?: StringNullableWithAggregatesFilter<"Booking"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Booking"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Booking"> | Date | string
   }
@@ -6484,6 +6504,7 @@ export namespace Prisma {
     status?: $Enums.BookingStatus
     totalPrice: Decimal | DecimalJsLike | number | string
     meetingUrl?: string | null
+    studentCameraMode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     student: UserCreateNestedOneWithoutBookingsInput
@@ -6499,6 +6520,7 @@ export namespace Prisma {
     status?: $Enums.BookingStatus
     totalPrice: Decimal | DecimalJsLike | number | string
     meetingUrl?: string | null
+    studentCameraMode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -6510,6 +6532,7 @@ export namespace Prisma {
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     totalPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    studentCameraMode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: UserUpdateOneRequiredWithoutBookingsNestedInput
@@ -6525,6 +6548,7 @@ export namespace Prisma {
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     totalPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    studentCameraMode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -6538,6 +6562,7 @@ export namespace Prisma {
     status?: $Enums.BookingStatus
     totalPrice: Decimal | DecimalJsLike | number | string
     meetingUrl?: string | null
+    studentCameraMode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -6549,6 +6574,7 @@ export namespace Prisma {
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     totalPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    studentCameraMode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -6562,6 +6588,7 @@ export namespace Prisma {
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     totalPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    studentCameraMode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -6965,6 +6992,7 @@ export namespace Prisma {
     status?: SortOrder
     totalPrice?: SortOrder
     meetingUrl?: SortOrder
+    studentCameraMode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -6982,6 +7010,7 @@ export namespace Prisma {
     status?: SortOrder
     totalPrice?: SortOrder
     meetingUrl?: SortOrder
+    studentCameraMode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -6995,6 +7024,7 @@ export namespace Prisma {
     status?: SortOrder
     totalPrice?: SortOrder
     meetingUrl?: SortOrder
+    studentCameraMode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -7607,6 +7637,7 @@ export namespace Prisma {
     status?: $Enums.BookingStatus
     totalPrice: Decimal | DecimalJsLike | number | string
     meetingUrl?: string | null
+    studentCameraMode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     tutor: TutorProfileCreateNestedOneWithoutBookingsInput
@@ -7620,6 +7651,7 @@ export namespace Prisma {
     status?: $Enums.BookingStatus
     totalPrice: Decimal | DecimalJsLike | number | string
     meetingUrl?: string | null
+    studentCameraMode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -7717,6 +7749,7 @@ export namespace Prisma {
     status?: EnumBookingStatusFilter<"Booking"> | $Enums.BookingStatus
     totalPrice?: DecimalFilter<"Booking"> | Decimal | DecimalJsLike | number | string
     meetingUrl?: StringNullableFilter<"Booking"> | string | null
+    studentCameraMode?: StringNullableFilter<"Booking"> | string | null
     createdAt?: DateTimeFilter<"Booking"> | Date | string
     updatedAt?: DateTimeFilter<"Booking"> | Date | string
   }
@@ -7786,6 +7819,7 @@ export namespace Prisma {
     status?: $Enums.BookingStatus
     totalPrice: Decimal | DecimalJsLike | number | string
     meetingUrl?: string | null
+    studentCameraMode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     student: UserCreateNestedOneWithoutBookingsInput
@@ -7799,6 +7833,7 @@ export namespace Prisma {
     status?: $Enums.BookingStatus
     totalPrice: Decimal | DecimalJsLike | number | string
     meetingUrl?: string | null
+    studentCameraMode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -8066,6 +8101,7 @@ export namespace Prisma {
     status?: $Enums.BookingStatus
     totalPrice: Decimal | DecimalJsLike | number | string
     meetingUrl?: string | null
+    studentCameraMode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -8084,6 +8120,7 @@ export namespace Prisma {
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     totalPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    studentCameraMode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tutor?: TutorProfileUpdateOneRequiredWithoutBookingsNestedInput
@@ -8097,6 +8134,7 @@ export namespace Prisma {
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     totalPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    studentCameraMode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -8109,6 +8147,7 @@ export namespace Prisma {
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     totalPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    studentCameraMode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -8142,6 +8181,7 @@ export namespace Prisma {
     status?: $Enums.BookingStatus
     totalPrice: Decimal | DecimalJsLike | number | string
     meetingUrl?: string | null
+    studentCameraMode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -8153,6 +8193,7 @@ export namespace Prisma {
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     totalPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    studentCameraMode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: UserUpdateOneRequiredWithoutBookingsNestedInput
@@ -8166,6 +8207,7 @@ export namespace Prisma {
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     totalPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    studentCameraMode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -8178,6 +8220,7 @@ export namespace Prisma {
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     totalPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    studentCameraMode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

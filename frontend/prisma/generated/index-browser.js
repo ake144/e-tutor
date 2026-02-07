@@ -150,6 +150,7 @@ exports.Prisma.BookingScalarFieldEnum = {
   status: 'status',
   totalPrice: 'totalPrice',
   meetingUrl: 'meetingUrl',
+  studentCameraMode: 'studentCameraMode',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -189,6 +190,7 @@ exports.Prisma.JsonNullValueFilter = {
 };
 exports.Role = exports.$Enums.Role = {
   STUDENT: 'STUDENT',
+  PARENT: 'PARENT',
   TUTOR: 'TUTOR',
   ADMIN: 'ADMIN'
 };
