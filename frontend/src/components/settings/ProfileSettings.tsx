@@ -59,10 +59,15 @@ export default function ProfileSettings() {
       try {
           await updateProfile({
               name: formData.name,
-              // email is usually not editable quickly or needs verification
               bio: formData.bio,
               subjects: formData.subjects.split(",").map(s => s.trim()).filter(s => s),
-              // Add other fields when backend supports them
+              education: formData.education,
+              country: formData.country,
+              city: formData.city,
+              area: formData.area,
+              gender: formData.gender,
+              // languages also needs to be in User interface if we want to save it, simpler to just treat it like bio for now if it's string
+              languages: formData.languages 
           });
           setMessage({ type: 'success', text: "Profile updated successfully!" });
       } catch (error) {
