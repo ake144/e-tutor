@@ -30,10 +30,10 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="flex min-h-screen bg-[#F8F9FC]">
+    <div className="flex min-h-screen mt-6 bg-[#F8F9FC]">
       <Sidebar />
       
-      <div className="flex-1 ml-64 p-8">
+      <div className="flex-1 ml-1 pt-8 p-1">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row gap-8">
             <SettingsSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
