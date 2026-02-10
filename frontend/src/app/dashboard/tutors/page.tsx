@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react";
-import { createSession } from "@/lib/sessions";
+import { createRecurringSessions } from "@/lib/sessions";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import ProtectedRoute from "../../(auth)/ProtectedRoute";
@@ -24,16 +24,21 @@ export default function TutorsPage() {
     ? getTutors().filter((t) => t.subjects.includes(subject))
     : getTutors();
 
-  function handleBook(date: string, time: string) {
+  function handleBook(date: string, time: string, frequencyPerWeek: number, contractMonths: number) {
     if (!user?.email || !bookingTutor) return;
-    const session = createSession({
+    const sessions = createRecurringSessions({
       tutor: bookingTutor.email,
       student: user.email,
-      date,
+      startDate: date,
       time,
+      months: contractMonths,
+      frequencyPerWeek,
     });
-    setJoinSessionId(session.id);
-    setConfirmation(`Session booked with ${bookingTutor.name} on ${date} at ${time}!`);
+    const first = sessions[0];
+    if (first) setJoinSessionId(first.id);
+    setConfirmation(
+      `Sessions booked with ${bookingTutor.name}. ${frequencyPerWeek}x per week for ${contractMonths} month${contractMonths > 1 ? "s" : ""}, starting ${date} at ${time}.`
+    );
     setBookingTutor(null);
   }
 

@@ -134,6 +134,8 @@ function CheckoutContent() {
 
                 {/* Card Fields */}
                 {paymentMethod === "card" && (
+                    <>
+                   
                 <section className="space-y-4">
                     <div>
                         <label className="block text-sm font-bold text-gray-700 mb-2">Name on Card</label>
@@ -164,30 +166,7 @@ function CheckoutContent() {
                          <input type="text" placeholder="90210" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white" />
                     </div>
                 </section>
-                )}
 
-                {
-                    paymentMethod === "chapa" && (
-                         <ChapaButton
-                            amount={total}
-                            email={user.email}
-                            firstName={user.name.split(' ')[0]}
-                            lastName={user.name.split(' ')[1] || ''}
-                            txRef={txRef}
-                            phone_number={(user as any).phone || ''}
-                            courseSlug={tutor.id}
-                        />
-                )}
-                {/* Discount Code */}
-                {/* <section>
-                     <label className="block text-sm font-bold text-gray-700 mb-2">Discount Code</label>
-                     <div className="flex gap-2">
-                         <input type="text" placeholder="Paste code here" className="flex-1 px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white" />
-                          <button className="px-6 py-3 bg-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-300 transition">Apply</button>
-                     </div>
-                 </section> */}
-
-                {/* Subscription */}
                 <div className="p-4 bg-blue-50 rounded-xl border border-blue-100 flex items-start gap-4">
                     <input type="checkbox" className="mt-1 w-5 h-5 text-blue-600 rounded focus:ring-blue-500" />
                     <div>
@@ -215,6 +194,32 @@ function CheckoutContent() {
                 <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
                     <FaShieldAlt /> Payments are secure and encrypted.
                 </div>
+                </>
+                )}
+
+                {
+                    paymentMethod === "chapa" && (
+                         <ChapaButton
+                            amount={total}
+                            email={user.email}
+                            firstName={user.name.split(' ')[0]}
+                            lastName={user.name.split(' ')[1] || ''}
+                            txRef={txRef}
+                            phone_number={(user as any).phone || ''}
+                            courseSlug={tutor.id}
+                        />
+                )}
+                {/* Discount Code */}
+                {/* <section>
+                     <label className="block text-sm font-bold text-gray-700 mb-2">Discount Code</label>
+                     <div className="flex gap-2">
+                         <input type="text" placeholder="Paste code here" className="flex-1 px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white" />
+                          <button className="px-6 py-3 bg-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-300 transition">Apply</button>
+                     </div>
+                 </section> */}
+
+             
+                
             </div>
 
             {/* Right Column: Order Summary */}

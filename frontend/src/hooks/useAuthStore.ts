@@ -8,6 +8,12 @@ export interface User {
   avatar?: string;
   bio?: string;
   subjects?: string[];
+  education?: string;
+  country?: string;
+  city?: string;
+  area?: string;
+  gender?: string;
+  languages?: string;
 }
 
 interface AuthState {
@@ -19,6 +25,7 @@ interface AuthState {
   register: (data: any) => Promise<void>;
   logout: () => Promise<void>;
   checkSession: () => Promise<void>;
+  updateProfile: (data: Partial<User>) => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -120,6 +127,31 @@ export const useAuthStore = create<AuthState>((set) => ({
     } finally {
       // ALWAYS set loading to false to prevent infinite spinners
       set({ loading: false });
+    }
+  },
+
+  updateProfile: async (updates) => {
+    set({ loading: true, error: null });
+    try {
+      // Implement the API call here
+      // const res = await fetch("/api/auth/profile", {
+      //   method: "PATCH",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify(updates),
+      // });
+      // const data = await res.json();
+      // if (!data.success) throw new Error(data.error);
+      
+      // For now, optimistic update + mock delay
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      set((state) => ({
+        user: state.user ? { ...state.user, ...updates } : null,
+        loading: false,
+      }));
+    } catch (err: any) {
+      set({ error: err.message, loading: false });
+      throw err;
     }
   },
 }));
