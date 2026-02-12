@@ -128,7 +128,9 @@ exports.Prisma.UserScalarFieldEnum = {
   role: 'role',
   avatar: 'avatar',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  resetToken: 'resetToken',
+  resetTokenExpiry: 'resetTokenExpiry'
 };
 
 exports.Prisma.TutorProfileScalarFieldEnum = {
@@ -150,9 +152,9 @@ exports.Prisma.BookingScalarFieldEnum = {
   status: 'status',
   totalPrice: 'totalPrice',
   meetingUrl: 'meetingUrl',
-  studentCameraMode: 'studentCameraMode',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  studentCameraMode: 'studentCameraMode'
 };
 
 exports.Prisma.ReviewScalarFieldEnum = {
@@ -190,9 +192,9 @@ exports.Prisma.JsonNullValueFilter = {
 };
 exports.Role = exports.$Enums.Role = {
   STUDENT: 'STUDENT',
-  PARENT: 'PARENT',
   TUTOR: 'TUTOR',
-  ADMIN: 'ADMIN'
+  ADMIN: 'ADMIN',
+  PARENT: 'PARENT'
 };
 
 exports.BookingStatus = exports.$Enums.BookingStatus = {

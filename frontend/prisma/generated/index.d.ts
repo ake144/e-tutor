@@ -40,9 +40,9 @@ export type Review = $Result.DefaultSelection<Prisma.$ReviewPayload>
 export namespace $Enums {
   export const Role: {
   STUDENT: 'STUDENT',
-  PARENT: 'PARENT',
   TUTOR: 'TUTOR',
-  ADMIN: 'ADMIN'
+  ADMIN: 'ADMIN',
+  PARENT: 'PARENT'
 };
 
 export type Role = (typeof Role)[keyof typeof Role]
@@ -1257,6 +1257,8 @@ export namespace Prisma {
     avatar: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    resetToken: string | null
+    resetTokenExpiry: Date | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -1268,6 +1270,8 @@ export namespace Prisma {
     avatar: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    resetToken: string | null
+    resetTokenExpiry: Date | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -1279,6 +1283,8 @@ export namespace Prisma {
     avatar: number
     createdAt: number
     updatedAt: number
+    resetToken: number
+    resetTokenExpiry: number
     _all: number
   }
 
@@ -1292,6 +1298,8 @@ export namespace Prisma {
     avatar?: true
     createdAt?: true
     updatedAt?: true
+    resetToken?: true
+    resetTokenExpiry?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -1303,6 +1311,8 @@ export namespace Prisma {
     avatar?: true
     createdAt?: true
     updatedAt?: true
+    resetToken?: true
+    resetTokenExpiry?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -1314,6 +1324,8 @@ export namespace Prisma {
     avatar?: true
     createdAt?: true
     updatedAt?: true
+    resetToken?: true
+    resetTokenExpiry?: true
     _all?: true
   }
 
@@ -1398,6 +1410,8 @@ export namespace Prisma {
     avatar: string | null
     createdAt: Date
     updatedAt: Date
+    resetToken: string | null
+    resetTokenExpiry: Date | null
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -1426,9 +1440,11 @@ export namespace Prisma {
     avatar?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    tutorProfile?: boolean | User$tutorProfileArgs<ExtArgs>
+    resetToken?: boolean
+    resetTokenExpiry?: boolean
     bookings?: boolean | User$bookingsArgs<ExtArgs>
     reviews?: boolean | User$reviewsArgs<ExtArgs>
+    tutorProfile?: boolean | User$tutorProfileArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1441,6 +1457,8 @@ export namespace Prisma {
     avatar?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    resetToken?: boolean
+    resetTokenExpiry?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1452,6 +1470,8 @@ export namespace Prisma {
     avatar?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    resetToken?: boolean
+    resetTokenExpiry?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -1463,13 +1483,15 @@ export namespace Prisma {
     avatar?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    resetToken?: boolean
+    resetTokenExpiry?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "password" | "name" | "role" | "avatar" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "password" | "name" | "role" | "avatar" | "createdAt" | "updatedAt" | "resetToken" | "resetTokenExpiry", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    tutorProfile?: boolean | User$tutorProfileArgs<ExtArgs>
     bookings?: boolean | User$bookingsArgs<ExtArgs>
     reviews?: boolean | User$reviewsArgs<ExtArgs>
+    tutorProfile?: boolean | User$tutorProfileArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1478,9 +1500,9 @@ export namespace Prisma {
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
-      tutorProfile: Prisma.$TutorProfilePayload<ExtArgs> | null
       bookings: Prisma.$BookingPayload<ExtArgs>[]
       reviews: Prisma.$ReviewPayload<ExtArgs>[]
+      tutorProfile: Prisma.$TutorProfilePayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -1491,6 +1513,8 @@ export namespace Prisma {
       avatar: string | null
       createdAt: Date
       updatedAt: Date
+      resetToken: string | null
+      resetTokenExpiry: Date | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -1885,9 +1909,9 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    tutorProfile<T extends User$tutorProfileArgs<ExtArgs> = {}>(args?: Subset<T, User$tutorProfileArgs<ExtArgs>>): Prisma__TutorProfileClient<$Result.GetResult<Prisma.$TutorProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     bookings<T extends User$bookingsArgs<ExtArgs> = {}>(args?: Subset<T, User$bookingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     reviews<T extends User$reviewsArgs<ExtArgs> = {}>(args?: Subset<T, User$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    tutorProfile<T extends User$tutorProfileArgs<ExtArgs> = {}>(args?: Subset<T, User$tutorProfileArgs<ExtArgs>>): Prisma__TutorProfileClient<$Result.GetResult<Prisma.$TutorProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1925,6 +1949,8 @@ export namespace Prisma {
     readonly avatar: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
+    readonly resetToken: FieldRef<"User", 'String'>
+    readonly resetTokenExpiry: FieldRef<"User", 'DateTime'>
   }
     
 
@@ -2313,25 +2339,6 @@ export namespace Prisma {
   }
 
   /**
-   * User.tutorProfile
-   */
-  export type User$tutorProfileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TutorProfile
-     */
-    select?: TutorProfileSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the TutorProfile
-     */
-    omit?: TutorProfileOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TutorProfileInclude<ExtArgs> | null
-    where?: TutorProfileWhereInput
-  }
-
-  /**
    * User.bookings
    */
   export type User$bookingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2377,6 +2384,25 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ReviewScalarFieldEnum | ReviewScalarFieldEnum[]
+  }
+
+  /**
+   * User.tutorProfile
+   */
+  export type User$tutorProfileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TutorProfile
+     */
+    select?: TutorProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TutorProfile
+     */
+    omit?: TutorProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TutorProfileInclude<ExtArgs> | null
+    where?: TutorProfileWhereInput
   }
 
   /**
@@ -2608,8 +2634,8 @@ export namespace Prisma {
     subjects?: boolean
     availability?: boolean
     rating?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
     bookings?: boolean | TutorProfile$bookingsArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
     _count?: boolean | TutorProfileCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["tutorProfile"]>
 
@@ -2647,8 +2673,8 @@ export namespace Prisma {
 
   export type TutorProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "bio" | "hourlyRate" | "subjects" | "availability" | "rating", ExtArgs["result"]["tutorProfile"]>
   export type TutorProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
     bookings?: boolean | TutorProfile$bookingsArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
     _count?: boolean | TutorProfileCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TutorProfileIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2661,8 +2687,8 @@ export namespace Prisma {
   export type $TutorProfilePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "TutorProfile"
     objects: {
-      user: Prisma.$UserPayload<ExtArgs>
       bookings: Prisma.$BookingPayload<ExtArgs>[]
+      user: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3066,8 +3092,8 @@ export namespace Prisma {
    */
   export interface Prisma__TutorProfileClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     bookings<T extends TutorProfile$bookingsArgs<ExtArgs> = {}>(args?: Subset<T, TutorProfile$bookingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3571,9 +3597,9 @@ export namespace Prisma {
     status: $Enums.BookingStatus | null
     totalPrice: Decimal | null
     meetingUrl: string | null
-    studentCameraMode: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    studentCameraMode: string | null
   }
 
   export type BookingMaxAggregateOutputType = {
@@ -3585,9 +3611,9 @@ export namespace Prisma {
     status: $Enums.BookingStatus | null
     totalPrice: Decimal | null
     meetingUrl: string | null
-    studentCameraMode: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    studentCameraMode: string | null
   }
 
   export type BookingCountAggregateOutputType = {
@@ -3599,9 +3625,9 @@ export namespace Prisma {
     status: number
     totalPrice: number
     meetingUrl: number
-    studentCameraMode: number
     createdAt: number
     updatedAt: number
+    studentCameraMode: number
     _all: number
   }
 
@@ -3623,9 +3649,9 @@ export namespace Prisma {
     status?: true
     totalPrice?: true
     meetingUrl?: true
-    studentCameraMode?: true
     createdAt?: true
     updatedAt?: true
+    studentCameraMode?: true
   }
 
   export type BookingMaxAggregateInputType = {
@@ -3637,9 +3663,9 @@ export namespace Prisma {
     status?: true
     totalPrice?: true
     meetingUrl?: true
-    studentCameraMode?: true
     createdAt?: true
     updatedAt?: true
+    studentCameraMode?: true
   }
 
   export type BookingCountAggregateInputType = {
@@ -3651,9 +3677,9 @@ export namespace Prisma {
     status?: true
     totalPrice?: true
     meetingUrl?: true
-    studentCameraMode?: true
     createdAt?: true
     updatedAt?: true
+    studentCameraMode?: true
     _all?: true
   }
 
@@ -3752,9 +3778,9 @@ export namespace Prisma {
     status: $Enums.BookingStatus
     totalPrice: Decimal
     meetingUrl: string | null
-    studentCameraMode: string | null
     createdAt: Date
     updatedAt: Date
+    studentCameraMode: string | null
     _count: BookingCountAggregateOutputType | null
     _avg: BookingAvgAggregateOutputType | null
     _sum: BookingSumAggregateOutputType | null
@@ -3785,9 +3811,9 @@ export namespace Prisma {
     status?: boolean
     totalPrice?: boolean
     meetingUrl?: boolean
-    studentCameraMode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    studentCameraMode?: boolean
     student?: boolean | UserDefaultArgs<ExtArgs>
     tutor?: boolean | TutorProfileDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["booking"]>
@@ -3801,9 +3827,9 @@ export namespace Prisma {
     status?: boolean
     totalPrice?: boolean
     meetingUrl?: boolean
-    studentCameraMode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    studentCameraMode?: boolean
     student?: boolean | UserDefaultArgs<ExtArgs>
     tutor?: boolean | TutorProfileDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["booking"]>
@@ -3817,9 +3843,9 @@ export namespace Prisma {
     status?: boolean
     totalPrice?: boolean
     meetingUrl?: boolean
-    studentCameraMode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    studentCameraMode?: boolean
     student?: boolean | UserDefaultArgs<ExtArgs>
     tutor?: boolean | TutorProfileDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["booking"]>
@@ -3833,12 +3859,12 @@ export namespace Prisma {
     status?: boolean
     totalPrice?: boolean
     meetingUrl?: boolean
-    studentCameraMode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    studentCameraMode?: boolean
   }
 
-  export type BookingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "tutorId" | "startTime" | "endTime" | "status" | "totalPrice" | "meetingUrl" | "studentCameraMode" | "createdAt" | "updatedAt", ExtArgs["result"]["booking"]>
+  export type BookingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "tutorId" | "startTime" | "endTime" | "status" | "totalPrice" | "meetingUrl" | "createdAt" | "updatedAt" | "studentCameraMode", ExtArgs["result"]["booking"]>
   export type BookingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | UserDefaultArgs<ExtArgs>
     tutor?: boolean | TutorProfileDefaultArgs<ExtArgs>
@@ -3867,9 +3893,9 @@ export namespace Prisma {
       status: $Enums.BookingStatus
       totalPrice: Prisma.Decimal
       meetingUrl: string | null
-      studentCameraMode: string | null
       createdAt: Date
       updatedAt: Date
+      studentCameraMode: string | null
     }, ExtArgs["result"]["booking"]>
     composites: {}
   }
@@ -4303,9 +4329,9 @@ export namespace Prisma {
     readonly status: FieldRef<"Booking", 'BookingStatus'>
     readonly totalPrice: FieldRef<"Booking", 'Decimal'>
     readonly meetingUrl: FieldRef<"Booking", 'String'>
-    readonly studentCameraMode: FieldRef<"Booking", 'String'>
     readonly createdAt: FieldRef<"Booking", 'DateTime'>
     readonly updatedAt: FieldRef<"Booking", 'DateTime'>
+    readonly studentCameraMode: FieldRef<"Booking", 'String'>
   }
     
 
@@ -5834,7 +5860,9 @@ export namespace Prisma {
     role: 'role',
     avatar: 'avatar',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    resetToken: 'resetToken',
+    resetTokenExpiry: 'resetTokenExpiry'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -5862,9 +5890,9 @@ export namespace Prisma {
     status: 'status',
     totalPrice: 'totalPrice',
     meetingUrl: 'meetingUrl',
-    studentCameraMode: 'studentCameraMode',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    studentCameraMode: 'studentCameraMode'
   };
 
   export type BookingScalarFieldEnum = (typeof BookingScalarFieldEnum)[keyof typeof BookingScalarFieldEnum]
@@ -6054,9 +6082,11 @@ export namespace Prisma {
     avatar?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    tutorProfile?: XOR<TutorProfileNullableScalarRelationFilter, TutorProfileWhereInput> | null
+    resetToken?: StringNullableFilter<"User"> | string | null
+    resetTokenExpiry?: DateTimeNullableFilter<"User"> | Date | string | null
     bookings?: BookingListRelationFilter
     reviews?: ReviewListRelationFilter
+    tutorProfile?: XOR<TutorProfileNullableScalarRelationFilter, TutorProfileWhereInput> | null
   }
 
   export type UserOrderByWithRelationInput = {
@@ -6068,9 +6098,11 @@ export namespace Prisma {
     avatar?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    tutorProfile?: TutorProfileOrderByWithRelationInput
+    resetToken?: SortOrderInput | SortOrder
+    resetTokenExpiry?: SortOrderInput | SortOrder
     bookings?: BookingOrderByRelationAggregateInput
     reviews?: ReviewOrderByRelationAggregateInput
+    tutorProfile?: TutorProfileOrderByWithRelationInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -6085,9 +6117,11 @@ export namespace Prisma {
     avatar?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    tutorProfile?: XOR<TutorProfileNullableScalarRelationFilter, TutorProfileWhereInput> | null
+    resetToken?: StringNullableFilter<"User"> | string | null
+    resetTokenExpiry?: DateTimeNullableFilter<"User"> | Date | string | null
     bookings?: BookingListRelationFilter
     reviews?: ReviewListRelationFilter
+    tutorProfile?: XOR<TutorProfileNullableScalarRelationFilter, TutorProfileWhereInput> | null
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -6099,6 +6133,8 @@ export namespace Prisma {
     avatar?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    resetToken?: SortOrderInput | SortOrder
+    resetTokenExpiry?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -6116,6 +6152,8 @@ export namespace Prisma {
     avatar?: StringNullableWithAggregatesFilter<"User"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    resetToken?: StringNullableWithAggregatesFilter<"User"> | string | null
+    resetTokenExpiry?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   }
 
   export type TutorProfileWhereInput = {
@@ -6129,8 +6167,8 @@ export namespace Prisma {
     subjects?: StringNullableListFilter<"TutorProfile">
     availability?: JsonNullableFilter<"TutorProfile">
     rating?: FloatFilter<"TutorProfile"> | number
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     bookings?: BookingListRelationFilter
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type TutorProfileOrderByWithRelationInput = {
@@ -6141,8 +6179,8 @@ export namespace Prisma {
     subjects?: SortOrder
     availability?: SortOrderInput | SortOrder
     rating?: SortOrder
-    user?: UserOrderByWithRelationInput
     bookings?: BookingOrderByRelationAggregateInput
+    user?: UserOrderByWithRelationInput
   }
 
   export type TutorProfileWhereUniqueInput = Prisma.AtLeast<{
@@ -6156,8 +6194,8 @@ export namespace Prisma {
     subjects?: StringNullableListFilter<"TutorProfile">
     availability?: JsonNullableFilter<"TutorProfile">
     rating?: FloatFilter<"TutorProfile"> | number
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     bookings?: BookingListRelationFilter
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id" | "userId">
 
   export type TutorProfileOrderByWithAggregationInput = {
@@ -6200,9 +6238,9 @@ export namespace Prisma {
     status?: EnumBookingStatusFilter<"Booking"> | $Enums.BookingStatus
     totalPrice?: DecimalFilter<"Booking"> | Decimal | DecimalJsLike | number | string
     meetingUrl?: StringNullableFilter<"Booking"> | string | null
-    studentCameraMode?: StringNullableFilter<"Booking"> | string | null
     createdAt?: DateTimeFilter<"Booking"> | Date | string
     updatedAt?: DateTimeFilter<"Booking"> | Date | string
+    studentCameraMode?: StringNullableFilter<"Booking"> | string | null
     student?: XOR<UserScalarRelationFilter, UserWhereInput>
     tutor?: XOR<TutorProfileScalarRelationFilter, TutorProfileWhereInput>
   }
@@ -6216,9 +6254,9 @@ export namespace Prisma {
     status?: SortOrder
     totalPrice?: SortOrder
     meetingUrl?: SortOrderInput | SortOrder
-    studentCameraMode?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    studentCameraMode?: SortOrderInput | SortOrder
     student?: UserOrderByWithRelationInput
     tutor?: TutorProfileOrderByWithRelationInput
   }
@@ -6235,9 +6273,9 @@ export namespace Prisma {
     status?: EnumBookingStatusFilter<"Booking"> | $Enums.BookingStatus
     totalPrice?: DecimalFilter<"Booking"> | Decimal | DecimalJsLike | number | string
     meetingUrl?: StringNullableFilter<"Booking"> | string | null
-    studentCameraMode?: StringNullableFilter<"Booking"> | string | null
     createdAt?: DateTimeFilter<"Booking"> | Date | string
     updatedAt?: DateTimeFilter<"Booking"> | Date | string
+    studentCameraMode?: StringNullableFilter<"Booking"> | string | null
     student?: XOR<UserScalarRelationFilter, UserWhereInput>
     tutor?: XOR<TutorProfileScalarRelationFilter, TutorProfileWhereInput>
   }, "id">
@@ -6251,9 +6289,9 @@ export namespace Prisma {
     status?: SortOrder
     totalPrice?: SortOrder
     meetingUrl?: SortOrderInput | SortOrder
-    studentCameraMode?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    studentCameraMode?: SortOrderInput | SortOrder
     _count?: BookingCountOrderByAggregateInput
     _avg?: BookingAvgOrderByAggregateInput
     _max?: BookingMaxOrderByAggregateInput
@@ -6273,9 +6311,9 @@ export namespace Prisma {
     status?: EnumBookingStatusWithAggregatesFilter<"Booking"> | $Enums.BookingStatus
     totalPrice?: DecimalWithAggregatesFilter<"Booking"> | Decimal | DecimalJsLike | number | string
     meetingUrl?: StringNullableWithAggregatesFilter<"Booking"> | string | null
-    studentCameraMode?: StringNullableWithAggregatesFilter<"Booking"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Booking"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Booking"> | Date | string
+    studentCameraMode?: StringNullableWithAggregatesFilter<"Booking"> | string | null
   }
 
   export type ReviewWhereInput = {
@@ -6344,9 +6382,11 @@ export namespace Prisma {
     avatar?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    tutorProfile?: TutorProfileCreateNestedOneWithoutUserInput
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
     bookings?: BookingCreateNestedManyWithoutStudentInput
     reviews?: ReviewCreateNestedManyWithoutStudentInput
+    tutorProfile?: TutorProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -6358,9 +6398,11 @@ export namespace Prisma {
     avatar?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    tutorProfile?: TutorProfileUncheckedCreateNestedOneWithoutUserInput
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
     bookings?: BookingUncheckedCreateNestedManyWithoutStudentInput
     reviews?: ReviewUncheckedCreateNestedManyWithoutStudentInput
+    tutorProfile?: TutorProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -6372,9 +6414,11 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    tutorProfile?: TutorProfileUpdateOneWithoutUserNestedInput
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bookings?: BookingUpdateManyWithoutStudentNestedInput
     reviews?: ReviewUpdateManyWithoutStudentNestedInput
+    tutorProfile?: TutorProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -6386,9 +6430,11 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    tutorProfile?: TutorProfileUncheckedUpdateOneWithoutUserNestedInput
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bookings?: BookingUncheckedUpdateManyWithoutStudentNestedInput
     reviews?: ReviewUncheckedUpdateManyWithoutStudentNestedInput
+    tutorProfile?: TutorProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -6400,6 +6446,8 @@ export namespace Prisma {
     avatar?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -6411,6 +6459,8 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -6422,6 +6472,8 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type TutorProfileCreateInput = {
@@ -6431,8 +6483,8 @@ export namespace Prisma {
     subjects?: TutorProfileCreatesubjectsInput | string[]
     availability?: NullableJsonNullValueInput | InputJsonValue
     rating?: number
-    user: UserCreateNestedOneWithoutTutorProfileInput
     bookings?: BookingCreateNestedManyWithoutTutorInput
+    user: UserCreateNestedOneWithoutTutorProfileInput
   }
 
   export type TutorProfileUncheckedCreateInput = {
@@ -6453,8 +6505,8 @@ export namespace Prisma {
     subjects?: TutorProfileUpdatesubjectsInput | string[]
     availability?: NullableJsonNullValueInput | InputJsonValue
     rating?: FloatFieldUpdateOperationsInput | number
-    user?: UserUpdateOneRequiredWithoutTutorProfileNestedInput
     bookings?: BookingUpdateManyWithoutTutorNestedInput
+    user?: UserUpdateOneRequiredWithoutTutorProfileNestedInput
   }
 
   export type TutorProfileUncheckedUpdateInput = {
@@ -6504,9 +6556,9 @@ export namespace Prisma {
     status?: $Enums.BookingStatus
     totalPrice: Decimal | DecimalJsLike | number | string
     meetingUrl?: string | null
-    studentCameraMode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    studentCameraMode?: string | null
     student: UserCreateNestedOneWithoutBookingsInput
     tutor: TutorProfileCreateNestedOneWithoutBookingsInput
   }
@@ -6520,9 +6572,9 @@ export namespace Prisma {
     status?: $Enums.BookingStatus
     totalPrice: Decimal | DecimalJsLike | number | string
     meetingUrl?: string | null
-    studentCameraMode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    studentCameraMode?: string | null
   }
 
   export type BookingUpdateInput = {
@@ -6532,9 +6584,9 @@ export namespace Prisma {
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     totalPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    studentCameraMode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studentCameraMode?: NullableStringFieldUpdateOperationsInput | string | null
     student?: UserUpdateOneRequiredWithoutBookingsNestedInput
     tutor?: TutorProfileUpdateOneRequiredWithoutBookingsNestedInput
   }
@@ -6548,9 +6600,9 @@ export namespace Prisma {
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     totalPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    studentCameraMode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studentCameraMode?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type BookingCreateManyInput = {
@@ -6562,9 +6614,9 @@ export namespace Prisma {
     status?: $Enums.BookingStatus
     totalPrice: Decimal | DecimalJsLike | number | string
     meetingUrl?: string | null
-    studentCameraMode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    studentCameraMode?: string | null
   }
 
   export type BookingUpdateManyMutationInput = {
@@ -6574,9 +6626,9 @@ export namespace Prisma {
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     totalPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    studentCameraMode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studentCameraMode?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type BookingUncheckedUpdateManyInput = {
@@ -6588,9 +6640,9 @@ export namespace Prisma {
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     totalPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    studentCameraMode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studentCameraMode?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ReviewCreateInput = {
@@ -6696,9 +6748,15 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type TutorProfileNullableScalarRelationFilter = {
-    is?: TutorProfileWhereInput | null
-    isNot?: TutorProfileWhereInput | null
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type BookingListRelationFilter = {
@@ -6711,6 +6769,11 @@ export namespace Prisma {
     every?: ReviewWhereInput
     some?: ReviewWhereInput
     none?: ReviewWhereInput
+  }
+
+  export type TutorProfileNullableScalarRelationFilter = {
+    is?: TutorProfileWhereInput | null
+    isNot?: TutorProfileWhereInput | null
   }
 
   export type SortOrderInput = {
@@ -6735,6 +6798,8 @@ export namespace Prisma {
     avatar?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    resetToken?: SortOrder
+    resetTokenExpiry?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -6746,6 +6811,8 @@ export namespace Prisma {
     avatar?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    resetToken?: SortOrder
+    resetTokenExpiry?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -6757,6 +6824,8 @@ export namespace Prisma {
     avatar?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    resetToken?: SortOrder
+    resetTokenExpiry?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -6817,6 +6886,20 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type DecimalFilter<$PrismaModel = never> = {
@@ -6992,9 +7075,9 @@ export namespace Prisma {
     status?: SortOrder
     totalPrice?: SortOrder
     meetingUrl?: SortOrder
-    studentCameraMode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    studentCameraMode?: SortOrder
   }
 
   export type BookingAvgOrderByAggregateInput = {
@@ -7010,9 +7093,9 @@ export namespace Prisma {
     status?: SortOrder
     totalPrice?: SortOrder
     meetingUrl?: SortOrder
-    studentCameraMode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    studentCameraMode?: SortOrder
   }
 
   export type BookingMinOrderByAggregateInput = {
@@ -7024,9 +7107,9 @@ export namespace Prisma {
     status?: SortOrder
     totalPrice?: SortOrder
     meetingUrl?: SortOrder
-    studentCameraMode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    studentCameraMode?: SortOrder
   }
 
   export type BookingSumOrderByAggregateInput = {
@@ -7102,12 +7185,6 @@ export namespace Prisma {
     _max?: NestedIntFilter<$PrismaModel>
   }
 
-  export type TutorProfileCreateNestedOneWithoutUserInput = {
-    create?: XOR<TutorProfileCreateWithoutUserInput, TutorProfileUncheckedCreateWithoutUserInput>
-    connectOrCreate?: TutorProfileCreateOrConnectWithoutUserInput
-    connect?: TutorProfileWhereUniqueInput
-  }
-
   export type BookingCreateNestedManyWithoutStudentInput = {
     create?: XOR<BookingCreateWithoutStudentInput, BookingUncheckedCreateWithoutStudentInput> | BookingCreateWithoutStudentInput[] | BookingUncheckedCreateWithoutStudentInput[]
     connectOrCreate?: BookingCreateOrConnectWithoutStudentInput | BookingCreateOrConnectWithoutStudentInput[]
@@ -7122,7 +7199,7 @@ export namespace Prisma {
     connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
   }
 
-  export type TutorProfileUncheckedCreateNestedOneWithoutUserInput = {
+  export type TutorProfileCreateNestedOneWithoutUserInput = {
     create?: XOR<TutorProfileCreateWithoutUserInput, TutorProfileUncheckedCreateWithoutUserInput>
     connectOrCreate?: TutorProfileCreateOrConnectWithoutUserInput
     connect?: TutorProfileWhereUniqueInput
@@ -7142,6 +7219,12 @@ export namespace Prisma {
     connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
   }
 
+  export type TutorProfileUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<TutorProfileCreateWithoutUserInput, TutorProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: TutorProfileCreateOrConnectWithoutUserInput
+    connect?: TutorProfileWhereUniqueInput
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -7158,14 +7241,8 @@ export namespace Prisma {
     set?: Date | string
   }
 
-  export type TutorProfileUpdateOneWithoutUserNestedInput = {
-    create?: XOR<TutorProfileCreateWithoutUserInput, TutorProfileUncheckedCreateWithoutUserInput>
-    connectOrCreate?: TutorProfileCreateOrConnectWithoutUserInput
-    upsert?: TutorProfileUpsertWithoutUserInput
-    disconnect?: TutorProfileWhereInput | boolean
-    delete?: TutorProfileWhereInput | boolean
-    connect?: TutorProfileWhereUniqueInput
-    update?: XOR<XOR<TutorProfileUpdateToOneWithWhereWithoutUserInput, TutorProfileUpdateWithoutUserInput>, TutorProfileUncheckedUpdateWithoutUserInput>
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
   }
 
   export type BookingUpdateManyWithoutStudentNestedInput = {
@@ -7196,7 +7273,7 @@ export namespace Prisma {
     deleteMany?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
   }
 
-  export type TutorProfileUncheckedUpdateOneWithoutUserNestedInput = {
+  export type TutorProfileUpdateOneWithoutUserNestedInput = {
     create?: XOR<TutorProfileCreateWithoutUserInput, TutorProfileUncheckedCreateWithoutUserInput>
     connectOrCreate?: TutorProfileCreateOrConnectWithoutUserInput
     upsert?: TutorProfileUpsertWithoutUserInput
@@ -7234,14 +7311,18 @@ export namespace Prisma {
     deleteMany?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
   }
 
-  export type TutorProfileCreatesubjectsInput = {
-    set: string[]
+  export type TutorProfileUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<TutorProfileCreateWithoutUserInput, TutorProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: TutorProfileCreateOrConnectWithoutUserInput
+    upsert?: TutorProfileUpsertWithoutUserInput
+    disconnect?: TutorProfileWhereInput | boolean
+    delete?: TutorProfileWhereInput | boolean
+    connect?: TutorProfileWhereUniqueInput
+    update?: XOR<XOR<TutorProfileUpdateToOneWithWhereWithoutUserInput, TutorProfileUpdateWithoutUserInput>, TutorProfileUncheckedUpdateWithoutUserInput>
   }
 
-  export type UserCreateNestedOneWithoutTutorProfileInput = {
-    create?: XOR<UserCreateWithoutTutorProfileInput, UserUncheckedCreateWithoutTutorProfileInput>
-    connectOrCreate?: UserCreateOrConnectWithoutTutorProfileInput
-    connect?: UserWhereUniqueInput
+  export type TutorProfileCreatesubjectsInput = {
+    set: string[]
   }
 
   export type BookingCreateNestedManyWithoutTutorInput = {
@@ -7249,6 +7330,12 @@ export namespace Prisma {
     connectOrCreate?: BookingCreateOrConnectWithoutTutorInput | BookingCreateOrConnectWithoutTutorInput[]
     createMany?: BookingCreateManyTutorInputEnvelope
     connect?: BookingWhereUniqueInput | BookingWhereUniqueInput[]
+  }
+
+  export type UserCreateNestedOneWithoutTutorProfileInput = {
+    create?: XOR<UserCreateWithoutTutorProfileInput, UserUncheckedCreateWithoutTutorProfileInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTutorProfileInput
+    connect?: UserWhereUniqueInput
   }
 
   export type BookingUncheckedCreateNestedManyWithoutTutorInput = {
@@ -7279,14 +7366,6 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type UserUpdateOneRequiredWithoutTutorProfileNestedInput = {
-    create?: XOR<UserCreateWithoutTutorProfileInput, UserUncheckedCreateWithoutTutorProfileInput>
-    connectOrCreate?: UserCreateOrConnectWithoutTutorProfileInput
-    upsert?: UserUpsertWithoutTutorProfileInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTutorProfileInput, UserUpdateWithoutTutorProfileInput>, UserUncheckedUpdateWithoutTutorProfileInput>
-  }
-
   export type BookingUpdateManyWithoutTutorNestedInput = {
     create?: XOR<BookingCreateWithoutTutorInput, BookingUncheckedCreateWithoutTutorInput> | BookingCreateWithoutTutorInput[] | BookingUncheckedCreateWithoutTutorInput[]
     connectOrCreate?: BookingCreateOrConnectWithoutTutorInput | BookingCreateOrConnectWithoutTutorInput[]
@@ -7299,6 +7378,14 @@ export namespace Prisma {
     update?: BookingUpdateWithWhereUniqueWithoutTutorInput | BookingUpdateWithWhereUniqueWithoutTutorInput[]
     updateMany?: BookingUpdateManyWithWhereWithoutTutorInput | BookingUpdateManyWithWhereWithoutTutorInput[]
     deleteMany?: BookingScalarWhereInput | BookingScalarWhereInput[]
+  }
+
+  export type UserUpdateOneRequiredWithoutTutorProfileNestedInput = {
+    create?: XOR<UserCreateWithoutTutorProfileInput, UserUncheckedCreateWithoutTutorProfileInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTutorProfileInput
+    upsert?: UserUpsertWithoutTutorProfileInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTutorProfileInput, UserUpdateWithoutTutorProfileInput>, UserUncheckedUpdateWithoutTutorProfileInput>
   }
 
   export type BookingUncheckedUpdateManyWithoutTutorNestedInput = {
@@ -7415,6 +7502,17 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -7493,6 +7591,20 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedDecimalFilter<$PrismaModel = never> = {
@@ -7605,31 +7717,6 @@ export namespace Prisma {
     _max?: NestedIntFilter<$PrismaModel>
   }
 
-  export type TutorProfileCreateWithoutUserInput = {
-    id?: string
-    bio?: string | null
-    hourlyRate: Decimal | DecimalJsLike | number | string
-    subjects?: TutorProfileCreatesubjectsInput | string[]
-    availability?: NullableJsonNullValueInput | InputJsonValue
-    rating?: number
-    bookings?: BookingCreateNestedManyWithoutTutorInput
-  }
-
-  export type TutorProfileUncheckedCreateWithoutUserInput = {
-    id?: string
-    bio?: string | null
-    hourlyRate: Decimal | DecimalJsLike | number | string
-    subjects?: TutorProfileCreatesubjectsInput | string[]
-    availability?: NullableJsonNullValueInput | InputJsonValue
-    rating?: number
-    bookings?: BookingUncheckedCreateNestedManyWithoutTutorInput
-  }
-
-  export type TutorProfileCreateOrConnectWithoutUserInput = {
-    where: TutorProfileWhereUniqueInput
-    create: XOR<TutorProfileCreateWithoutUserInput, TutorProfileUncheckedCreateWithoutUserInput>
-  }
-
   export type BookingCreateWithoutStudentInput = {
     id?: string
     startTime: Date | string
@@ -7637,9 +7724,9 @@ export namespace Prisma {
     status?: $Enums.BookingStatus
     totalPrice: Decimal | DecimalJsLike | number | string
     meetingUrl?: string | null
-    studentCameraMode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    studentCameraMode?: string | null
     tutor: TutorProfileCreateNestedOneWithoutBookingsInput
   }
 
@@ -7651,9 +7738,9 @@ export namespace Prisma {
     status?: $Enums.BookingStatus
     totalPrice: Decimal | DecimalJsLike | number | string
     meetingUrl?: string | null
-    studentCameraMode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    studentCameraMode?: string | null
   }
 
   export type BookingCreateOrConnectWithoutStudentInput = {
@@ -7690,6 +7777,91 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type TutorProfileCreateWithoutUserInput = {
+    id?: string
+    bio?: string | null
+    hourlyRate: Decimal | DecimalJsLike | number | string
+    subjects?: TutorProfileCreatesubjectsInput | string[]
+    availability?: NullableJsonNullValueInput | InputJsonValue
+    rating?: number
+    bookings?: BookingCreateNestedManyWithoutTutorInput
+  }
+
+  export type TutorProfileUncheckedCreateWithoutUserInput = {
+    id?: string
+    bio?: string | null
+    hourlyRate: Decimal | DecimalJsLike | number | string
+    subjects?: TutorProfileCreatesubjectsInput | string[]
+    availability?: NullableJsonNullValueInput | InputJsonValue
+    rating?: number
+    bookings?: BookingUncheckedCreateNestedManyWithoutTutorInput
+  }
+
+  export type TutorProfileCreateOrConnectWithoutUserInput = {
+    where: TutorProfileWhereUniqueInput
+    create: XOR<TutorProfileCreateWithoutUserInput, TutorProfileUncheckedCreateWithoutUserInput>
+  }
+
+  export type BookingUpsertWithWhereUniqueWithoutStudentInput = {
+    where: BookingWhereUniqueInput
+    update: XOR<BookingUpdateWithoutStudentInput, BookingUncheckedUpdateWithoutStudentInput>
+    create: XOR<BookingCreateWithoutStudentInput, BookingUncheckedCreateWithoutStudentInput>
+  }
+
+  export type BookingUpdateWithWhereUniqueWithoutStudentInput = {
+    where: BookingWhereUniqueInput
+    data: XOR<BookingUpdateWithoutStudentInput, BookingUncheckedUpdateWithoutStudentInput>
+  }
+
+  export type BookingUpdateManyWithWhereWithoutStudentInput = {
+    where: BookingScalarWhereInput
+    data: XOR<BookingUpdateManyMutationInput, BookingUncheckedUpdateManyWithoutStudentInput>
+  }
+
+  export type BookingScalarWhereInput = {
+    AND?: BookingScalarWhereInput | BookingScalarWhereInput[]
+    OR?: BookingScalarWhereInput[]
+    NOT?: BookingScalarWhereInput | BookingScalarWhereInput[]
+    id?: StringFilter<"Booking"> | string
+    studentId?: StringFilter<"Booking"> | string
+    tutorId?: StringFilter<"Booking"> | string
+    startTime?: DateTimeFilter<"Booking"> | Date | string
+    endTime?: DateTimeFilter<"Booking"> | Date | string
+    status?: EnumBookingStatusFilter<"Booking"> | $Enums.BookingStatus
+    totalPrice?: DecimalFilter<"Booking"> | Decimal | DecimalJsLike | number | string
+    meetingUrl?: StringNullableFilter<"Booking"> | string | null
+    createdAt?: DateTimeFilter<"Booking"> | Date | string
+    updatedAt?: DateTimeFilter<"Booking"> | Date | string
+    studentCameraMode?: StringNullableFilter<"Booking"> | string | null
+  }
+
+  export type ReviewUpsertWithWhereUniqueWithoutStudentInput = {
+    where: ReviewWhereUniqueInput
+    update: XOR<ReviewUpdateWithoutStudentInput, ReviewUncheckedUpdateWithoutStudentInput>
+    create: XOR<ReviewCreateWithoutStudentInput, ReviewUncheckedCreateWithoutStudentInput>
+  }
+
+  export type ReviewUpdateWithWhereUniqueWithoutStudentInput = {
+    where: ReviewWhereUniqueInput
+    data: XOR<ReviewUpdateWithoutStudentInput, ReviewUncheckedUpdateWithoutStudentInput>
+  }
+
+  export type ReviewUpdateManyWithWhereWithoutStudentInput = {
+    where: ReviewScalarWhereInput
+    data: XOR<ReviewUpdateManyMutationInput, ReviewUncheckedUpdateManyWithoutStudentInput>
+  }
+
+  export type ReviewScalarWhereInput = {
+    AND?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
+    OR?: ReviewScalarWhereInput[]
+    NOT?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
+    id?: StringFilter<"Review"> | string
+    rating?: IntFilter<"Review"> | number
+    comment?: StringNullableFilter<"Review"> | string | null
+    studentId?: StringFilter<"Review"> | string
+    createdAt?: DateTimeFilter<"Review"> | Date | string
+  }
+
   export type TutorProfileUpsertWithoutUserInput = {
     update: XOR<TutorProfileUpdateWithoutUserInput, TutorProfileUncheckedUpdateWithoutUserInput>
     create: XOR<TutorProfileCreateWithoutUserInput, TutorProfileUncheckedCreateWithoutUserInput>
@@ -7721,64 +7893,40 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutTutorNestedInput
   }
 
-  export type BookingUpsertWithWhereUniqueWithoutStudentInput = {
+  export type BookingCreateWithoutTutorInput = {
+    id?: string
+    startTime: Date | string
+    endTime: Date | string
+    status?: $Enums.BookingStatus
+    totalPrice: Decimal | DecimalJsLike | number | string
+    meetingUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    studentCameraMode?: string | null
+    student: UserCreateNestedOneWithoutBookingsInput
+  }
+
+  export type BookingUncheckedCreateWithoutTutorInput = {
+    id?: string
+    studentId: string
+    startTime: Date | string
+    endTime: Date | string
+    status?: $Enums.BookingStatus
+    totalPrice: Decimal | DecimalJsLike | number | string
+    meetingUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    studentCameraMode?: string | null
+  }
+
+  export type BookingCreateOrConnectWithoutTutorInput = {
     where: BookingWhereUniqueInput
-    update: XOR<BookingUpdateWithoutStudentInput, BookingUncheckedUpdateWithoutStudentInput>
-    create: XOR<BookingCreateWithoutStudentInput, BookingUncheckedCreateWithoutStudentInput>
+    create: XOR<BookingCreateWithoutTutorInput, BookingUncheckedCreateWithoutTutorInput>
   }
 
-  export type BookingUpdateWithWhereUniqueWithoutStudentInput = {
-    where: BookingWhereUniqueInput
-    data: XOR<BookingUpdateWithoutStudentInput, BookingUncheckedUpdateWithoutStudentInput>
-  }
-
-  export type BookingUpdateManyWithWhereWithoutStudentInput = {
-    where: BookingScalarWhereInput
-    data: XOR<BookingUpdateManyMutationInput, BookingUncheckedUpdateManyWithoutStudentInput>
-  }
-
-  export type BookingScalarWhereInput = {
-    AND?: BookingScalarWhereInput | BookingScalarWhereInput[]
-    OR?: BookingScalarWhereInput[]
-    NOT?: BookingScalarWhereInput | BookingScalarWhereInput[]
-    id?: StringFilter<"Booking"> | string
-    studentId?: StringFilter<"Booking"> | string
-    tutorId?: StringFilter<"Booking"> | string
-    startTime?: DateTimeFilter<"Booking"> | Date | string
-    endTime?: DateTimeFilter<"Booking"> | Date | string
-    status?: EnumBookingStatusFilter<"Booking"> | $Enums.BookingStatus
-    totalPrice?: DecimalFilter<"Booking"> | Decimal | DecimalJsLike | number | string
-    meetingUrl?: StringNullableFilter<"Booking"> | string | null
-    studentCameraMode?: StringNullableFilter<"Booking"> | string | null
-    createdAt?: DateTimeFilter<"Booking"> | Date | string
-    updatedAt?: DateTimeFilter<"Booking"> | Date | string
-  }
-
-  export type ReviewUpsertWithWhereUniqueWithoutStudentInput = {
-    where: ReviewWhereUniqueInput
-    update: XOR<ReviewUpdateWithoutStudentInput, ReviewUncheckedUpdateWithoutStudentInput>
-    create: XOR<ReviewCreateWithoutStudentInput, ReviewUncheckedCreateWithoutStudentInput>
-  }
-
-  export type ReviewUpdateWithWhereUniqueWithoutStudentInput = {
-    where: ReviewWhereUniqueInput
-    data: XOR<ReviewUpdateWithoutStudentInput, ReviewUncheckedUpdateWithoutStudentInput>
-  }
-
-  export type ReviewUpdateManyWithWhereWithoutStudentInput = {
-    where: ReviewScalarWhereInput
-    data: XOR<ReviewUpdateManyMutationInput, ReviewUncheckedUpdateManyWithoutStudentInput>
-  }
-
-  export type ReviewScalarWhereInput = {
-    AND?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
-    OR?: ReviewScalarWhereInput[]
-    NOT?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
-    id?: StringFilter<"Review"> | string
-    rating?: IntFilter<"Review"> | number
-    comment?: StringNullableFilter<"Review"> | string | null
-    studentId?: StringFilter<"Review"> | string
-    createdAt?: DateTimeFilter<"Review"> | Date | string
+  export type BookingCreateManyTutorInputEnvelope = {
+    data: BookingCreateManyTutorInput | BookingCreateManyTutorInput[]
+    skipDuplicates?: boolean
   }
 
   export type UserCreateWithoutTutorProfileInput = {
@@ -7790,6 +7938,8 @@ export namespace Prisma {
     avatar?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
     bookings?: BookingCreateNestedManyWithoutStudentInput
     reviews?: ReviewCreateNestedManyWithoutStudentInput
   }
@@ -7803,6 +7953,8 @@ export namespace Prisma {
     avatar?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
     bookings?: BookingUncheckedCreateNestedManyWithoutStudentInput
     reviews?: ReviewUncheckedCreateNestedManyWithoutStudentInput
   }
@@ -7812,40 +7964,20 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutTutorProfileInput, UserUncheckedCreateWithoutTutorProfileInput>
   }
 
-  export type BookingCreateWithoutTutorInput = {
-    id?: string
-    startTime: Date | string
-    endTime: Date | string
-    status?: $Enums.BookingStatus
-    totalPrice: Decimal | DecimalJsLike | number | string
-    meetingUrl?: string | null
-    studentCameraMode?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    student: UserCreateNestedOneWithoutBookingsInput
-  }
-
-  export type BookingUncheckedCreateWithoutTutorInput = {
-    id?: string
-    studentId: string
-    startTime: Date | string
-    endTime: Date | string
-    status?: $Enums.BookingStatus
-    totalPrice: Decimal | DecimalJsLike | number | string
-    meetingUrl?: string | null
-    studentCameraMode?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type BookingCreateOrConnectWithoutTutorInput = {
+  export type BookingUpsertWithWhereUniqueWithoutTutorInput = {
     where: BookingWhereUniqueInput
+    update: XOR<BookingUpdateWithoutTutorInput, BookingUncheckedUpdateWithoutTutorInput>
     create: XOR<BookingCreateWithoutTutorInput, BookingUncheckedCreateWithoutTutorInput>
   }
 
-  export type BookingCreateManyTutorInputEnvelope = {
-    data: BookingCreateManyTutorInput | BookingCreateManyTutorInput[]
-    skipDuplicates?: boolean
+  export type BookingUpdateWithWhereUniqueWithoutTutorInput = {
+    where: BookingWhereUniqueInput
+    data: XOR<BookingUpdateWithoutTutorInput, BookingUncheckedUpdateWithoutTutorInput>
+  }
+
+  export type BookingUpdateManyWithWhereWithoutTutorInput = {
+    where: BookingScalarWhereInput
+    data: XOR<BookingUpdateManyMutationInput, BookingUncheckedUpdateManyWithoutTutorInput>
   }
 
   export type UserUpsertWithoutTutorProfileInput = {
@@ -7868,6 +8000,8 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bookings?: BookingUpdateManyWithoutStudentNestedInput
     reviews?: ReviewUpdateManyWithoutStudentNestedInput
   }
@@ -7881,24 +8015,10 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bookings?: BookingUncheckedUpdateManyWithoutStudentNestedInput
     reviews?: ReviewUncheckedUpdateManyWithoutStudentNestedInput
-  }
-
-  export type BookingUpsertWithWhereUniqueWithoutTutorInput = {
-    where: BookingWhereUniqueInput
-    update: XOR<BookingUpdateWithoutTutorInput, BookingUncheckedUpdateWithoutTutorInput>
-    create: XOR<BookingCreateWithoutTutorInput, BookingUncheckedCreateWithoutTutorInput>
-  }
-
-  export type BookingUpdateWithWhereUniqueWithoutTutorInput = {
-    where: BookingWhereUniqueInput
-    data: XOR<BookingUpdateWithoutTutorInput, BookingUncheckedUpdateWithoutTutorInput>
-  }
-
-  export type BookingUpdateManyWithWhereWithoutTutorInput = {
-    where: BookingScalarWhereInput
-    data: XOR<BookingUpdateManyMutationInput, BookingUncheckedUpdateManyWithoutTutorInput>
   }
 
   export type UserCreateWithoutBookingsInput = {
@@ -7910,8 +8030,10 @@ export namespace Prisma {
     avatar?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    tutorProfile?: TutorProfileCreateNestedOneWithoutUserInput
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
     reviews?: ReviewCreateNestedManyWithoutStudentInput
+    tutorProfile?: TutorProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBookingsInput = {
@@ -7923,8 +8045,10 @@ export namespace Prisma {
     avatar?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    tutorProfile?: TutorProfileUncheckedCreateNestedOneWithoutUserInput
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
     reviews?: ReviewUncheckedCreateNestedManyWithoutStudentInput
+    tutorProfile?: TutorProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBookingsInput = {
@@ -7977,8 +8101,10 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    tutorProfile?: TutorProfileUpdateOneWithoutUserNestedInput
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviews?: ReviewUpdateManyWithoutStudentNestedInput
+    tutorProfile?: TutorProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBookingsInput = {
@@ -7990,8 +8116,10 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    tutorProfile?: TutorProfileUncheckedUpdateOneWithoutUserNestedInput
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviews?: ReviewUncheckedUpdateManyWithoutStudentNestedInput
+    tutorProfile?: TutorProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type TutorProfileUpsertWithoutBookingsInput = {
@@ -8034,8 +8162,10 @@ export namespace Prisma {
     avatar?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    tutorProfile?: TutorProfileCreateNestedOneWithoutUserInput
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
     bookings?: BookingCreateNestedManyWithoutStudentInput
+    tutorProfile?: TutorProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReviewsInput = {
@@ -8047,8 +8177,10 @@ export namespace Prisma {
     avatar?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    tutorProfile?: TutorProfileUncheckedCreateNestedOneWithoutUserInput
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
     bookings?: BookingUncheckedCreateNestedManyWithoutStudentInput
+    tutorProfile?: TutorProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReviewsInput = {
@@ -8076,8 +8208,10 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    tutorProfile?: TutorProfileUpdateOneWithoutUserNestedInput
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bookings?: BookingUpdateManyWithoutStudentNestedInput
+    tutorProfile?: TutorProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReviewsInput = {
@@ -8089,8 +8223,10 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    tutorProfile?: TutorProfileUncheckedUpdateOneWithoutUserNestedInput
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bookings?: BookingUncheckedUpdateManyWithoutStudentNestedInput
+    tutorProfile?: TutorProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type BookingCreateManyStudentInput = {
@@ -8101,9 +8237,9 @@ export namespace Prisma {
     status?: $Enums.BookingStatus
     totalPrice: Decimal | DecimalJsLike | number | string
     meetingUrl?: string | null
-    studentCameraMode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    studentCameraMode?: string | null
   }
 
   export type ReviewCreateManyStudentInput = {
@@ -8120,9 +8256,9 @@ export namespace Prisma {
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     totalPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    studentCameraMode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studentCameraMode?: NullableStringFieldUpdateOperationsInput | string | null
     tutor?: TutorProfileUpdateOneRequiredWithoutBookingsNestedInput
   }
 
@@ -8134,9 +8270,9 @@ export namespace Prisma {
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     totalPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    studentCameraMode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studentCameraMode?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type BookingUncheckedUpdateManyWithoutStudentInput = {
@@ -8147,9 +8283,9 @@ export namespace Prisma {
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     totalPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    studentCameraMode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studentCameraMode?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ReviewUpdateWithoutStudentInput = {
@@ -8181,9 +8317,9 @@ export namespace Prisma {
     status?: $Enums.BookingStatus
     totalPrice: Decimal | DecimalJsLike | number | string
     meetingUrl?: string | null
-    studentCameraMode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    studentCameraMode?: string | null
   }
 
   export type BookingUpdateWithoutTutorInput = {
@@ -8193,9 +8329,9 @@ export namespace Prisma {
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     totalPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    studentCameraMode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studentCameraMode?: NullableStringFieldUpdateOperationsInput | string | null
     student?: UserUpdateOneRequiredWithoutBookingsNestedInput
   }
 
@@ -8207,9 +8343,9 @@ export namespace Prisma {
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     totalPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    studentCameraMode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studentCameraMode?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type BookingUncheckedUpdateManyWithoutTutorInput = {
@@ -8220,9 +8356,9 @@ export namespace Prisma {
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     totalPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    studentCameraMode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studentCameraMode?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
 

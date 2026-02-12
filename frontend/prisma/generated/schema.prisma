@@ -1,75 +1,54 @@
-// prisma/schema.prisma
-
 generator client {
   provider = "prisma-client-js"
   output   = "./generated"
 }
 
 datasource db {
-  provider = "postgresql" // or "sqlite" for local dev
-}
-
-enum Role {
-  STUDENT
-  PARENT
-  TUTOR
-  ADMIN
-}
-
-enum BookingStatus {
-  PENDING
-  CONFIRMED
-  CANCELLED
-  COMPLETED
+  provider = "postgresql"
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  password  String // Hashed
-  name      String?
-  role      Role     @default(STUDENT)
-  avatar    String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Relations
-  tutorProfile TutorProfile?
-  bookings     Booking[]     @relation("StudentBookings")
-  reviews      Review[]
+  id               String        @id @default(uuid())
+  email            String        @unique
+  password         String
+  name             String?
+  role             Role          @default(STUDENT)
+  avatar           String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  resetToken       String?
+  resetTokenExpiry DateTime?
+  bookings         Booking[]     @relation("StudentBookings")
+  reviews          Review[]
+  tutorProfile     TutorProfile?
 }
 
 model TutorProfile {
-  id     String @id @default(uuid())
-  userId String @unique
-  user   User   @relation(fields: [userId], references: [id])
-
+  id           String    @id @default(uuid())
+  userId       String    @unique
   bio          String?
   hourlyRate   Decimal
-  subjects     String[] // e.g. ["Math", "Physics"]
-  availability Json? // Structured weekly availability
-  rating       Float    @default(0)
-
-  bookings Booking[] @relation("TutorBookings")
+  subjects     String[]
+  availability Json?
+  rating       Float     @default(0)
+  bookings     Booking[] @relation("TutorBookings")
+  user         User      @relation(fields: [userId], references: [id])
 }
 
 model Booking {
-  id        String       @id @default(uuid())
-  studentId String
-  tutorId   String
-  student   User         @relation("StudentBookings", fields: [studentId], references: [id])
-  tutor     TutorProfile @relation("TutorBookings", fields: [tutorId], references: [id])
-
-  startTime  DateTime
-  endTime    DateTime
-  status     BookingStatus @default(PENDING)
-  totalPrice Decimal
-
-  meetingUrl        String? // Generated LiveKit/Video room ID
-  studentCameraMode String? // Stores the preferred camera Device ID or 'front'/'back'
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                String        @id @default(uuid())
+  studentId         String
+  tutorId           String
+  startTime         DateTime
+  endTime           DateTime
+  status            BookingStatus @default(PENDING)
+  totalPrice        Decimal
+  meetingUrl        String?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  studentCameraMode String?
+  student           User          @relation("StudentBookings", fields: [studentId], references: [id])
+  tutor             TutorProfile  @relation("TutorBookings", fields: [tutorId], references: [id])
 }
 
 model Review {
@@ -77,6 +56,20 @@ model Review {
   rating    Int
   comment   String?
   studentId String
-  student   User     @relation(fields: [studentId], references: [id])
   createdAt DateTime @default(now())
+  student   User     @relation(fields: [studentId], references: [id])
+}
+
+enum Role {
+  STUDENT
+  TUTOR
+  ADMIN
+  PARENT
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
 }
