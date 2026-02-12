@@ -1,18 +1,30 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
 import { allSubjects } from "@/lib/tutors";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import { useRouter } from "next/navigation";
-import { FaUser, FaLock, FaEnvelope } from "react-icons/fa";
-
+import { cn } from "@/lib/utils";
+import {
+  ArrowRight,
+  Eye,
+  EyeOff,
+  Loader2,
+  Lock,
+  Mail,
+  Phone,
+  Sparkles,
+  User,
+} from "lucide-react";
 
 export default function SignupPage() {
-
   const [role, setRole] = useState<"STUDENT" | "TUTOR">("STUDENT");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   // Tutor-specific fields
@@ -25,20 +37,21 @@ export default function SignupPage() {
   const router = useRouter();
 
   useEffect(() => {
-    if (user) {
-      router.replace("/dashboard");
-    }
+    if (user) router.replace("/dashboard");
   }, [user, router]);
 
+  const mergedError = useMemo(() => formError ?? error, [formError, error]);
+
   function handleSubjectChange(subj: string) {
-    setSubjects((prev) => prev.includes(subj) ? prev.filter(s => s !== subj) : [...prev, subj]);
+    setSubjects((prev) => (prev.includes(subj) ? prev.filter((s) => s !== subj) : [...prev, subj]));
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setFormError(null);
+
     if (!email || !password || !confirm || !name || !phone) {
-      setFormError("All fields are required.");
+      setFormError("Please fill in all required fields.");
       return;
     }
     if (password.length < 6) {
@@ -51,182 +64,289 @@ export default function SignupPage() {
     }
     if (role === "TUTOR") {
       if (subjects.length === 0 || !bio || !avatar) {
-        setFormError("All tutor fields are required.");
+        setFormError("Please complete your tutor profile (subjects, bio, and avatar URL).");
         return;
       }
     }
-    
+
     setIsSubmitting(true);
     try {
-        await register({email, password, 
-          role,
-          name,
-          phone,
-          ...(role === "TUTOR" ? { subjects, bio, avatar } : {}),
-        });
-    } catch (err) {
-        // Error handling if signup throws
+      await register({
+        email,
+        password,
+        role,
+        name,
+        phone,
+        ...(role === "TUTOR" ? { subjects, bio, avatar } : {}),
+      });
+    } catch {
+      // Error handled by store
     } finally {
-        setIsSubmitting(false);
+      setIsSubmitting(false);
     }
-    // Redirect will happen in useEffect
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-200 via-purple-100 pt-4 to-pink-100">
-      <div className="w-full max-w-md md:max-w-xl p-8 bg-white/90 rounded-3xl shadow-2xl border border-blue-100 relative">
-        <div className="flex flex-col items-center mb-6">
-          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-400 to-green-400 flex items-center justify-center mb-2 shadow-lg">
-            <FaUser className="text-white text-3xl" />
-          </div>
-          <h1 className="text-3xl font-extrabold text-blue-700 mb-1">Join Tutorly!</h1>
-          <p className="text-gray-500 text-sm">Create your account to start learning and having fun.</p>
+    <section className="rounded-2xl border bg-card/70 p-6 shadow-lg backdrop-blur md:p-8">
+      <header className="mb-6">
+        <div className="inline-flex items-center gap-2 rounded-full border bg-background/70 px-3 py-1 text-xs text-muted-foreground">
+          <Sparkles className="size-3.5" />
+          Create your account
         </div>
-        <form className="space-y-5" onSubmit={handleSubmit}>
-          <div className="flex justify-center gap-4 mb-2">
-            <button
-              type="button"
-              className={`px-4 py-2 rounded-lg font-bold shadow transition border-2 ${role === "STUDENT" ? "bg-blue-500 text-white border-blue-500" : "bg-white text-blue-700 border-blue-300"}`}
-              onClick={() => setRole("STUDENT")}
-            >
-              Parent/Student
-            </button>         
-            <button
-              type="button"
-              className={`px-4 py-2 rounded-lg font-bold shadow transition border-2 ${role === "TUTOR" ? "bg-green-500 text-white border-green-500" : "bg-white text-green-700 border-green-300"}`}
-              onClick={() => setRole("TUTOR")}
-            >
-              Tutor
-            </button>
+        <h1 className="mt-4 text-2xl font-semibold tracking-tight">Join Tutorly</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Get started in minutes — book sessions, collaborate live, and track progress.
+        </p>
+      </header>
+
+      <div className="mb-5">
+        <div className="grid grid-cols-2 rounded-xl border bg-background/60 p-1">
+          <button
+            type="button"
+            className={cn(
+              "h-9 rounded-lg text-sm font-medium transition",
+              role === "STUDENT" ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+            )}
+            onClick={() => setRole("STUDENT")}
+            aria-pressed={role === "STUDENT"}
+          >
+            Parent/Student
+          </button>
+          <button
+            type="button"
+            className={cn(
+              "h-9 rounded-lg text-sm font-medium transition",
+              role === "TUTOR" ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+            )}
+            onClick={() => setRole("TUTOR")}
+            aria-pressed={role === "TUTOR"}
+          >
+            Tutor
+          </button>
+        </div>
+      </div>
+
+      <form className="space-y-4" onSubmit={handleSubmit}>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="space-y-2">
+            <label htmlFor="name" className="text-sm font-medium">
+              Full name
+            </label>
+            <div className="relative">
+              <User className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <input
+                id="name"
+                className="h-11 w-full rounded-lg border bg-background/70 pl-10 pr-3 text-sm shadow-sm outline-none transition focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50"
+                placeholder="Your name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                autoComplete="name"
+                required
+              />
+            </div>
           </div>
-          <div className="relative">
-            <FaUser className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-300" />
-            <input
-              className="w-full pl-10 pr-4 py-2 border-2 border-blue-100 rounded-lg focus:outline-none focus:border-blue-400 transition text-gray-700 bg-blue-50 placeholder:text-blue-300"
-              placeholder="Full Name"
-              type="text"
-              aria-label="Full Name"
-              value={name}
-              onChange={e => setName(e.target.value)}
-              required
-            />
+
+          <div className="space-y-2">
+            <label htmlFor="phone" className="text-sm font-medium">
+              Phone
+            </label>
+            <div className="relative">
+              <Phone className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <input
+                id="phone"
+                className="h-11 w-full rounded-lg border bg-background/70 pl-10 pr-3 text-sm shadow-sm outline-none transition focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50"
+                placeholder="+1 555 123 4567"
+                type="tel"
+                inputMode="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                autoComplete="tel"
+                required
+              />
+            </div>
           </div>
+        </div>
+
+        <div className="space-y-2">
+          <label htmlFor="email" className="text-sm font-medium">
+            Email
+          </label>
           <div className="relative">
-            <FaEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-300" />
+            <Mail className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <input
-              className="w-full pl-10 pr-4 py-2 border-2 border-blue-100 rounded-lg focus:outline-none focus:border-blue-400 transition text-gray-700 bg-blue-50 placeholder:text-blue-300"
-              placeholder="Email"
+              id="email"
+              className="h-11 w-full rounded-lg border bg-background/70 pl-10 pr-3 text-sm shadow-sm outline-none transition focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50"
+              placeholder="you@example.com"
               type="email"
-              aria-label="Email"
+              inputMode="email"
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               autoComplete="email"
               required
             />
           </div>
-          <div className="relative">
-            <input
-              className="w-full pl-10 pr-4 py-2 border-2 border-blue-100 rounded-lg focus:outline-none focus:border-blue-400 transition text-gray-700 bg-blue-50 placeholder:text-blue-300"
-              placeholder="Phone Number"
-              type="tel"
-              aria-label="Phone Number"
-              value={phone}
-              onChange={e => setPhone(e.target.value)}
-              required
-            />
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 ">
+          <div className="space-y-2">
+            <label htmlFor="password" className="text-sm font-medium">
+              Password
+            </label>
+            <div className="relative">
+              <Lock className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <input
+                id="password"
+                className="h-11 w-full rounded-lg border bg-background/70 pl-10 pr-10 text-sm shadow-sm outline-none transition focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50"
+                placeholder="At least 6 characters"
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="new-password"
+                minLength={6}
+                required
+              />
+              <button
+                type="button"
+                className="absolute right-2 top-1/2 inline-flex size-8 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground transition hover:bg-accent hover:text-foreground"
+                onClick={() => setShowPassword((v) => !v)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+              </button>
+            </div>
           </div>
-          {/* <div className="relative">
-            <FaEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-300" />
-            <input
-              className="w-full pl-10 pr-4 py-2 border-2 border-blue-100 rounded-lg focus:outline-none focus:border-blue-400 transition text-gray-700 bg-blue-50 placeholder:text-blue-300"
-              placeholder="Email"
-              type="email"
-              aria-label="Email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              autoComplete="email"
-              required
-            />
-          </div> */}
-          <div className="relative">
-            <FaLock className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-300" />
-            <input
-              className="w-full pl-10 pr-4 py-2 border-2 border-blue-100 rounded-lg focus:outline-none focus:border-blue-400 transition text-gray-700 bg-blue-50 placeholder:text-blue-300"
-              placeholder="Password"
-              type="password"
-              aria-label="Password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              autoComplete="new-password"
-              required
-            />
+
+          <div className="space-y-2">
+            <label htmlFor="confirm" className="text-sm font-medium">
+              Confirm
+            </label>
+            <div className="relative">
+              <Lock className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <input
+                id="confirm"
+                className="h-11 w-full rounded-lg border bg-background/70 pl-10 pr-10 text-sm shadow-sm outline-none transition focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50"
+                placeholder="Repeat password"
+                type={showConfirm ? "text" : "password"}
+                value={confirm}
+                onChange={(e) => setConfirm(e.target.value)}
+                autoComplete="new-password"
+                minLength={6}
+                required
+              />
+              <button
+                type="button"
+                className="absolute right-2 top-1/2 inline-flex size-8 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground transition hover:bg-accent hover:text-foreground"
+                onClick={() => setShowConfirm((v) => !v)}
+                aria-label={showConfirm ? "Hide confirm password" : "Show confirm password"}
+              >
+                {showConfirm ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+              </button>
+            </div>
           </div>
-          <div className="relative">
-            <FaLock className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-300" />
-            <input
-              className="w-full pl-10 pr-4 py-2 border-2 border-blue-100 rounded-lg focus:outline-none focus:border-blue-400 transition text-gray-700 bg-blue-50 placeholder:text-blue-300"
-              placeholder="Confirm Password"
-              type="password"
-              aria-label="Confirm Password"
-              value={confirm}
-              onChange={e => setConfirm(e.target.value)}
-              autoComplete="new-password"
-              required
-            />
-          </div>
-          {role === "TUTOR" && (
-            <>
+        </div>
+
+        {role === "TUTOR" && (
+          <div className="rounded-xl border bg-background/50 p-4">
+            <div className="mb-3 flex items-start justify-between gap-3">
               <div>
-                <label className="block text-sm font-medium mb-1 text-blue-700">Subjects</label>
-                <div className="flex flex-wrap gap-2">
-                  {allSubjects.map((subj) => (
-                    <button
-                      type="button"
-                      key={subj}
-                      className={`px-3 py-1 rounded-full border text-sm font-medium transition ${subjects.includes(subj) ? "bg-blue-500 text-white" : "bg-white text-blue-700 border-blue-300 hover:bg-blue-50"}`}
-                      onClick={() => handleSubjectChange(subj)}
-                    >
-                      {subj}
-                    </button>
-                  ))}
+                <div className="text-sm font-semibold">Tutor profile</div>
+                <div className="mt-0.5 text-xs text-muted-foreground">
+                  These details appear on your public profile.
                 </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-1 text-blue-700">Bio</label>
+              <span className="rounded-full border bg-card/60 px-2.5 py-1 text-[11px] text-muted-foreground">
+                Required
+              </span>
+            </div>
+
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Subjects</label>
+                <div className="flex flex-wrap gap-2">
+                  {allSubjects.map((subj) => {
+                    const selected = subjects.includes(subj);
+                    return (
+                      <button
+                        type="button"
+                        key={subj}
+                        className={cn(
+                          "rounded-full border px-3 py-1 text-xs font-medium transition",
+                          selected
+                            ? "border-transparent bg-primary text-primary-foreground shadow-sm"
+                            : "bg-background/60 text-foreground hover:bg-accent"
+                        )}
+                        onClick={() => handleSubjectChange(subj)}
+                        aria-pressed={selected}
+                      >
+                        {subj}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="bio" className="text-sm font-medium">
+                  Bio
+                </label>
                 <textarea
-                  className="w-full border rounded-lg p-2 text-gray-700 bg-blue-50 focus:outline-none focus:border-blue-400 resize-none"
-                  placeholder="Tell parents and students about yourself..."
+                  id="bio"
+                  className="min-h-23 w-full resize-none rounded-lg border bg-background/70 p-3 text-sm shadow-sm outline-none transition focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50"
+                  placeholder="Share your teaching style, experience, and what students can expect…"
                   value={bio}
-                  onChange={e => setBio(e.target.value)}
-                  rows={3}
+                  onChange={(e) => setBio(e.target.value)}
+                  rows={4}
                   required
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-1 text-blue-700">Avatar URL</label>
-                <input
-                  className="w-full border rounded-lg p-2 text-gray-700 bg-blue-50 focus:outline-none focus:border-blue-400"
-                  placeholder="Paste a profile image URL..."
-                  value={avatar}
-                  onChange={e => setAvatar(e.target.value)}
-                  required
-                />
+
+              <div className="space-y-2">
+                <label htmlFor="avatar" className="text-sm font-medium">
+                  Avatar URL
+                </label>
+                <div className="relative">
+                  <User className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                  <input
+                    id="avatar"
+                    className="h-11 w-full rounded-lg border bg-background/70 pl-10 pr-3 text-sm shadow-sm outline-none transition focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50"
+                    placeholder="https://…"
+                    value={avatar}
+                    onChange={(e) => setAvatar(e.target.value)}
+                    required
+                  />
+                </div>
               </div>
-            </>
-          )}
-          {(formError || error) && (
-            <div className="text-red-500 text-sm text-center">{formError || error}</div>
-          )}
-          <button
-            className="w-full py-2 bg-gradient-to-r from-blue-500 to-green-400 text-white rounded-lg font-bold text-lg shadow hover:from-blue-600 hover:to-green-500 transition disabled:opacity-60"
-            disabled={isSubmitting}
-            type="submit"
+            </div>
+          </div>
+        )}
+
+        {mergedError && (
+          <div
+            role="alert"
+            className="rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive"
           >
-            {isSubmitting ? "Signing Up..." : "Sign Up"}
-          </button>
-        </form>
-        <p className="mt-6 text-center text-sm text-gray-500">Already have an account? <a href="/login" className="text-blue-600 hover:underline font-semibold">Sign in</a></p>
-      </div>
-    </main>
+            {mergedError}
+          </div>
+        )}
+
+        <button
+          className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition hover:bg-primary/90 disabled:pointer-events-none disabled:opacity-60"
+          disabled={isSubmitting}
+          type="submit"
+        >
+          {isSubmitting ? <Loader2 className="size-4 animate-spin" /> : null}
+          {isSubmitting ? "Creating account" : "Create account"}
+          <ArrowRight className="size-4" />
+        </button>
+      </form>
+
+      <p className="mt-6 text-center text-sm text-muted-foreground">
+        Already have an account?{" "}
+        <Link href="/login" className="font-medium text-foreground underline underline-offset-4">
+          Sign in
+        </Link>
+      </p>
+    </section>
   );
 }
